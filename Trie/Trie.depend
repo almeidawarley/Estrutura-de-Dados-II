@@ -1,0 +1,12 @@
+# depslib dependency file v1.0
+1499479210 source:/home/pedro/Documentos/Trie/Trie/main.cpp
+	<iostream>
+	<Trie.h>
+
+1499480115 source:/home/pedro/Documentos/Trie/Trie/src/Trie.cpp
+	"Trie.h"
+
+1499477299 source:/home/pedro/Documentos/Trie/Trie/src/TrieNo.cpp
+	"TrieNo.h"
+	<stdlib.h>
+
