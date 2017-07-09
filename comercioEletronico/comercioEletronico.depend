@@ -23,3 +23,29 @@
 	"TrieNo.h"
 	<stdlib.h>
 
+1499629255 source:c:\users\pedro\documents\tower\estrutura-de-dados-ii\comercioeletronico\main.cpp
+	<iostream>
+	<string>
+	<fstream>
+	<vector>
+	<cstdlib>
+	"Trie.h"
+	<conio.h>
+
+1499625919 c:\users\pedro\documents\tower\estrutura-de-dados-ii\comercioeletronico\trie.h
+	"TrieNo.h"
+	<string>
+	<vector>
+	<iostream>
+	<stdlib.h>
+
+1499625919 c:\users\pedro\documents\tower\estrutura-de-dados-ii\comercioeletronico\trieno.h
+	<vector>
+
+1499625919 source:c:\users\pedro\documents\tower\estrutura-de-dados-ii\comercioeletronico\trie.cpp
+	"Trie.h"
+
+1499625919 source:c:\users\pedro\documents\tower\estrutura-de-dados-ii\comercioeletronico\trieno.cpp
+	"TrieNo.h"
+	<stdlib.h>
+

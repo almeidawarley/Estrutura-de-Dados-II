@@ -2,7 +2,12 @@
 #include <string>
 #include <fstream>
 #include <vector>
+#include <cstdlib>
 #include "Trie.h"
+
+//!Não sei se funciona no linux
+#include<conio.h>
+
 
 using namespace std;
 
@@ -83,7 +88,25 @@ void buscarPorNome(vector<produto*> *produtos, Trie *iProdutos){
     cout << "BUSCANDO POR NOME..." << endl;
     string nome;
     cout << "***************************************************" << endl;
-    cout << "Digite o nome do produto que deseja procurar: "; cin >> nome;
+    cout << "Digite o nome do produto que deseja procurar (digite '.' para finalizar o nome): "<<endl;
+    //cin >> nome;
+    //!Ideia: Mas só funciona no windows
+    char c = getch(); //Algum equivalente no linux? getchar() espera o enter para ler as letras :/
+    if (system("CLS")) system("clear"); //Funciona no windows e no linux (mas não parece uma boa ideia)
+    while(c!='.'){
+        cout << "Digite o nome do produto que deseja procurar (digite '.' para finalizar o nome): "<<endl;
+        nome = nome+c;
+        cout<<nome<<endl;
+        cout<<"Sugestoes:"<<endl;
+        vector<string> sugestoes = iProdutos->completaPalavra(nome);
+        for(unsigned int i = 0; i < sugestoes.size(); i++)
+            cout << i+1 << "] " << sugestoes[i] << endl;
+        c = getch();
+        if (system("CLS")) system("clear");
+    }
+    //! Fim da ideia. Se não der substituir isso por cin>>nome (que está comentado ali em cima)
+
+
     if(iProdutos->buscarPalavra(nome)){
         vector<int> indices = iProdutos->recuperaIndices(nome);
         cout << "Produtos encontrados! Informacoes: " << endl;
