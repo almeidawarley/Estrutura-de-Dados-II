@@ -10,3 +10,16 @@
 	"TrieNo.h"
 	<stdlib.h>
 
+1499567752 source:c:\users\pedro\documents\tower\estrutura-de-dados-ii\trie\main.cpp
+	<iostream>
+	<vector>
+	<string>
+	<Trie.h>
+
+1499567644 source:c:\users\pedro\documents\tower\estrutura-de-dados-ii\trie\src\trie.cpp
+	"Trie.h"
+
+1499566415 source:c:\users\pedro\documents\tower\estrutura-de-dados-ii\trie\src\trieno.cpp
+	"TrieNo.h"
+	<stdlib.h>
+

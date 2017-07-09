@@ -2,6 +2,7 @@
 #define TRIE_H
 #include<TrieNo.h>
 #include<string>
+#include<vector>
 #include<iostream>
 #include<stdlib.h>
 
@@ -12,6 +13,7 @@ class Trie
         ~Trie();
         bool buscarPalavra(std::string palavra);
         void inserirPalavra(std::string palavra);
+        std::vector<std::string> completaPalavra(std::string palavra);
         void imprimeTrie();
     private:
         TrieNo* raiz;

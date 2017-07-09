@@ -15,10 +15,8 @@ bool Trie::buscarPalavra(std::string palavra){
     int tam = palavra.size();
     int i=0;
     TrieNo* aux = raiz;
-    TrieNo* aux2 = NULL;
     //Busco o maior prefixo até chegar no NULL
     while(aux!=NULL && i<tam){
-        aux2 = aux;
         if(palavra[i]==aux->getLetra()){
             aux = aux->getMeio();
             i++;
@@ -110,5 +108,46 @@ void imprimeRecursivo(TrieNo* no,std::string atual = ""){
 
 void Trie::imprimeTrie(){
     imprimeRecursivo(raiz);
+}
+
+
+
+void completaRecursivo(TrieNo* no,std::string atual,std::vector<std::string> *palavras){
+    if(no == NULL){
+        return;
+    }
+    completaRecursivo(no->getDir(),atual,palavras);
+    completaRecursivo(no->getEsq(),atual,palavras);
+    atual = atual + no->getLetra();
+    if(no->getEhChave()) palavras->push_back(atual);
+    completaRecursivo(no->getMeio(),atual,palavras);
+}
+
+std::vector<std::string> Trie::completaPalavra(std::string palavra){
+    int tam = palavra.size();
+    int i=0;
+    TrieNo* aux = raiz;
+    std::vector<std::string> palavras;
+    while(aux!=NULL && i<tam){
+        if(palavra[i]==aux->getLetra()){
+            aux = aux->getMeio();
+            i++;
+        }else{
+            if(palavra[i]>aux->getLetra()){
+                aux = aux->getDir();
+            }else{
+                aux = aux->getEsq();
+            }
+        }
+    }
+    if(aux == NULL) return palavras;
+
+    //!Essa linha aqui faz o auto-completar sugerir o próprio prefixo caso ele já seja uma chave
+    if(buscarPalavra(palavra)) palavras.push_back(palavra);
+    //!
+
+    completaRecursivo(aux,palavra,&palavras);
+    return palavras;
+
 }
 
