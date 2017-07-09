@@ -1,0 +1,6 @@
+5
+Telefone Eletrodomestico AAA 10
+Televisao Eletrodomestico BBB 5
+Telegrama Inutil CCC 3
+Wendt Orange Juicy 10
+Wendt Pineapple Igotapen 63

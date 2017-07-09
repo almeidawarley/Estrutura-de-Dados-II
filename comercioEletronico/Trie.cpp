@@ -15,8 +15,10 @@ bool Trie::buscarPalavra(std::string palavra){
     int tam = palavra.size();
     int i=0;
     TrieNo* aux = raiz;
+    TrieNo* anterior = NULL;
     //Busco o maior prefixo até chegar no NULL
     while(aux!=NULL && i<tam){
+        anterior = aux;
         if(palavra[i]==aux->getLetra()){
             aux = aux->getMeio();
             i++;
@@ -28,12 +30,12 @@ bool Trie::buscarPalavra(std::string palavra){
             }
         }
     }
-    if(i==tam) return true;
+    if(i==tam && anterior->getEhChave()) return true;
     else return false;
 }
 
 
-void Trie::inserirPalavra(std::string palavra){
+void Trie::inserirPalavra(std::string palavra, int indice){
     int tam = palavra.size();
     int i=0;
     bool direita = false,desceu = false; //Indicadores dos caminhos tomados até o NULL
@@ -61,7 +63,7 @@ void Trie::inserirPalavra(std::string palavra){
 
     //Se inseriu a palavra coloco que o anterior ao aux é fim de chave, e finalizo a função
     if(i == tam){
-        aux2->setChave(true);
+        aux2->setChave(true, indice);
         return;
     }
 
@@ -91,7 +93,7 @@ void Trie::inserirPalavra(std::string palavra){
         i++;
         aux = aux->getMeio();
     }
-    aux->setChave(true);
+    aux->setChave(true, indice);
 
 }
 
@@ -149,5 +151,27 @@ std::vector<std::string> Trie::completaPalavra(std::string palavra){
     completaRecursivo(aux,palavra,&palavras);
     return palavras;
 
+}
+
+std::vector<int> Trie::recuperaIndices(std::string palavra){
+    int tam = palavra.size();
+    int i=0;
+    TrieNo* aux = raiz;
+    TrieNo* anterior = NULL;
+    //Busco o maior prefixo até chegar no NULL
+    while(aux!=NULL && i<tam){
+        anterior = aux;
+        if(palavra[i]==aux->getLetra()){
+            aux = aux->getMeio();
+            i++;
+        }else{
+            if(palavra[i]>aux->getLetra()){
+                aux = aux->getDir();
+            }else{
+                aux = aux->getEsq();
+            }
+        }
+    }
+    return anterior->getIndices();
 }
 
