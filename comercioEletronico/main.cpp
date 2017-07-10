@@ -3,11 +3,11 @@
 #include <fstream>
 #include <vector>
 #include <cstdlib>
+#include <stdlib.h>
 #include "Trie.h"
 
 //!Não sei se funciona no linux
 #include<conio.h>
-
 
 using namespace std;
 
@@ -19,6 +19,23 @@ typedef struct sProduto{
     float preco;
 }produto;
 
+//joguei numa funcao porque, caso decidamos fazer outra coisa, dá pra alterar facilmente
+void clearScreen(){
+    if(system("CLS")) system("clear");
+}
+
+
+/*
+*Funcao para imprimir a base atual de produtos
+*@param  vector<produto*> *produtos:    ponteiro para o vetor de produtos
+*@return -
+*********************************************************/
+void imprimeBase(vector<produto*> *produtos){
+    for(unsigned int i = 0; i < produtos->size(); i++){
+        cout << (*produtos)[i]->nome << " | " << (*produtos)[i]->categoria << " | " << (*produtos)[i]->descricao << " | " << (*produtos)[i]->preco << endl;
+    }
+}
+
 /*
 *Funcao para ler a base de um caminho informado por parâmetro
 *@param  vector<produto*> *produtos:    ponteiro para o vetor de produtos
@@ -29,70 +46,104 @@ typedef struct sProduto{
 *********************************************************/
 void lerBase(vector<produto*> *produtos, Trie *iCategorias, Trie *iProdutos, string caminho){
     ifstream base(caminho.c_str());
-    int tamanho;
-    base >> tamanho;
-    produtos->reserve(tamanho);
-    string nome, categoria, descricao;
-    float preco;
+    string nome, categoria, descricao, preco, tamanho, enter;
+    int numeroRegistros = 0;
+    double meta = 0;
+    char quebra = (char) 10; // quebra de linha
+    getline(base, tamanho, ';');
+    getline(base, enter, quebra); // a ideia é ler o enter no final da linha para que não seja transportado para a string
+    numeroRegistros = atoi(tamanho.c_str());
+    produtos->reserve(numeroRegistros);
     register int indice = 0;
-    while(base >> nome >> categoria >> descricao >> preco){
+    cout << "Lendo registros de " << caminho << ": 000%";
+    while(getline(base, nome, ';')){
+        getline(base, categoria, ';');
+        getline(base, descricao, ';');
+        getline(base, preco, ';');
+        getline(base, enter, quebra);
         produto * leitura = new produto;
         leitura->categoria = categoria;
         leitura->nome = nome;
-        leitura->preco = preco;
+        leitura->preco = strtof(preco.c_str(), 0);
         leitura->descricao = descricao;
         produtos->push_back(leitura);
         iCategorias->inserirPalavra(categoria, indice);
         iProdutos->inserirPalavra(nome, indice);
         indice++;
+        if((float)indice/numeroRegistros > meta){
+            printf("\b\b\b\b%3.f%%", meta * 100);
+            meta += 0.1;
+        }
     }
+    cout <<"\b\b\b\b100%"<< endl;
+    //imprimeBase(produtos);
 }
 
 /*
-*Funcao para imprimir a base atual de produtos
+*Funcao para desalocar os produtos e atualizar a base conforme caminho informado por parâmetro
 *@param  vector<produto*> *produtos:    ponteiro para o vetor de produtos
+         string caminho:                caminho do arquivo da base
 *@return -
 *********************************************************/
-void imprimeBase(vector<produto*> produtos){
-    for(unsigned int i = 0; i < produtos.size(); i++){
-        cout << produtos[i]->nome << " | " << produtos[i]->categoria << " | " << produtos[i]->preco << endl;
-    }
-}
-
-//irá salvar a base novamente e desalocar os ponteiros para produtos do vector
 void finaliza(vector<produto*> produtos, string caminho){
     ofstream saida(caminho.c_str());
+    double meta = 0;
     saida << produtos.size() << endl;
+    cout << "Atualizando registros em " << caminho << ": 000%";
     for(unsigned int i = 0; i < produtos.size(); i++){
-        saida << produtos[i]->nome << " " << produtos[i]->categoria << " " << produtos[i]->descricao << " " << produtos[i]->preco << endl;
+        saida << produtos[i]->nome << ";" << produtos[i]->categoria << ";" << produtos[i]->descricao << ";" << produtos[i]->preco << ";";
         delete produtos[i];
         produtos[i] = NULL;
+        if(i+1 != produtos.size()) saida << endl;
+        if((float)(produtos.size()-i)/produtos.size() > meta){
+            printf("\b\b\b\b%3.f%%", meta * 100);
+            meta += 0.1;
+        }
     }
+    cout <<"\b\b\b\b100%"<< endl;
 }
 
+/*
+*Funcao para cadastrar novo produto na base
+*@param  vector<produto*> *produtos:    ponteiro para o vetor de produtos
+         Trie *iCategorias:             TRIE para indexação das categorias
+         Trie *iProdutos:               TRIE para indexação dos produtos
+*@return -
+*********************************************************/
 void cadastrarProduto(vector<produto*> *produtos, Trie *iCategorias, Trie *iProdutos){
-    string nome, categoria, descricao;
-    float preco;
+    string preco;
     produto * aCadastrar = new produto;
     cout << "CADASTRANDO PRODUTO..." << endl;
-    cout << "Digite o nome do produto a ser cadastrado: "; cin >> aCadastrar->nome;
-    cout << "Digite a categoria do produto a ser cadastrado: "; cin >> aCadastrar->categoria;
-    cout << "Digite a descricao do produto a ser cadastrado: "; cin >> aCadastrar->descricao;
-    cout << "Digite o preco do produto a ser cadastrado: "; cin >> aCadastrar->preco;
+    char quebra = (char) 10;
+    cin.ignore();
+    cout << "Digite o nome do produto a ser cadastrado: ";
+    getline(cin, aCadastrar->nome, quebra);
+    cout << "Digite a categoria do produto a ser cadastrado: ";
+    getline(cin, aCadastrar->categoria, quebra);
+    cout << "Digite a descricao do produto a ser cadastrado: ";
+    getline(cin, aCadastrar->descricao, quebra);
+    cout << "Digite o preco do produto a ser cadastrado: ";
+    getline(cin, preco, quebra);
+    aCadastrar->preco = strtof(preco.c_str(), 0);
     iCategorias->inserirPalavra(aCadastrar->categoria, produtos->size());
     iProdutos->inserirPalavra(aCadastrar->nome, produtos->size());
     produtos->push_back(aCadastrar);
 }
 
+/*
+*Funcao para buscar produto na base pelo nome
+*@param  vector<produto*> *produtos:    ponteiro para o vetor de produtos
+         Trie *iProdutos:               TRIE para indexação dos produtos
+*@return -
+*********************************************************/
 void buscarPorNome(vector<produto*> *produtos, Trie *iProdutos){
     cout << "BUSCANDO POR NOME..." << endl;
     string nome;
-    cout << "***************************************************" << endl;
     cout << "Digite o nome do produto que deseja procurar (digite '.' para finalizar o nome): "<<endl;
     //cin >> nome;
     //!Ideia: Mas só funciona no windows
     char c = getch(); //Algum equivalente no linux? getchar() espera o enter para ler as letras :/
-    if (system("CLS")) system("clear"); //Funciona no windows e no linux (mas não parece uma boa ideia)
+    clearScreen(); //Funciona no windows e no linux (mas não parece uma boa ideia)
     while(c!='.'){
         cout << "Digite o nome do produto que deseja procurar (digite '.' para finalizar o nome): "<<endl;
         nome = nome+c;
@@ -102,7 +153,7 @@ void buscarPorNome(vector<produto*> *produtos, Trie *iProdutos){
         for(unsigned int i = 0; i < sugestoes.size(); i++)
             cout << i+1 << "] " << sugestoes[i] << endl;
         c = getch();
-        if (system("CLS")) system("clear");
+        clearScreen();
     }
     //! Fim da ideia. Se não der substituir isso por cin>>nome (que está comentado ali em cima)
 
@@ -111,7 +162,7 @@ void buscarPorNome(vector<produto*> *produtos, Trie *iProdutos){
         vector<int> indices = iProdutos->recuperaIndices(nome);
         cout << "Produtos encontrados! Informacoes: " << endl;
         for(int k = 0; k < indices.size(); k++){
-            cout << " | Nome: " << (*produtos)[indices[k]]->nome << endl;
+            cout << " > Nome: " << (*produtos)[indices[k]]->nome << endl;
             cout << " | Categoria: " << (*produtos)[indices[k]]->categoria << endl;
             cout << " | Descricao: " << (*produtos)[indices[k]]->descricao << endl;
             cout << " | Preco: " << (*produtos)[indices[k]]->preco << endl;
@@ -124,10 +175,17 @@ void buscarPorNome(vector<produto*> *produtos, Trie *iProdutos){
     }
 
 }
+
+/*
+*Funcao para buscar produto na base pela categoria
+*@param  vector<produto*> *produtos:    ponteiro para o vetor de produtos
+         Trie *iCategorias:             TRIE para indexação das categorias
+*@return -
+*********************************************************/
 void buscarPorCategoria(vector<produto*> *produtos, Trie *iCategorias){
+    /// TODO: fazer o mesmo que for produzido no buscar por nome
     cout << "BUSCANDO POR CATEGORIA" << endl;
     string categoria;
-    cout << "***************************************************" << endl;
     cout << "Digite a categoria que deseja procurar: "; cin >> categoria;
     if(iCategorias->buscarPalavra(categoria)){
         cout << "Produto encontrado! Informacoes: " << endl;
@@ -140,15 +198,21 @@ void buscarPorCategoria(vector<produto*> *produtos, Trie *iCategorias){
     }
 }
 
+/*
+*Funcao para gerar relatório de todos os produtos na base
+*@param  vector<produto*> *produtos:    ponteiro para o vetor de produtos
+*@return -
+*********************************************************/
 void relatorio(vector<produto*> *produtos){
     cout << "RELATORIO..." << endl;
+    /// TODO: receber do usuário sobre qual característica deseja ordenar
+    /// e implementar sort (mergeSort ou heapSort) que leva em consideração a característica selecionada
 }
 
 int main(){
-    //wObdYSEvWRBLzZ02h67Y
-
     int opcao = 0;
     string caminho;
+    cout << "***************************************************" << endl;
     cout << "Informe o arquivo de origem dos registros: "; cin >> caminho;
     vector<produto*> produtos;
     Trie iCategorias, iProdutos;
@@ -164,7 +228,7 @@ int main(){
         cout << "5) sair" << endl;
         cout << "Digite sua escolha: ";
         cin >> opcao;
-        cout << "***************************************************" << endl << endl;
+        cout << "***************************************************" << endl;
         switch(opcao){
             case 1: cadastrarProduto(&produtos, &iCategorias, &iProdutos); break;
             case 2: buscarPorNome(&produtos, &iProdutos); break;
@@ -178,11 +242,12 @@ int main(){
         cout << "1) sim\t\t2) nao" << endl;
         cout << "Digite sua escolha: ";
         cin >> opcao;
-        cout << "***************************************************" << endl << endl;
+        cout << "***************************************************" << endl;
         switch(opcao){
             case 2: finaliza(produtos, caminho); return 0;
             default: break;
         }
+        clearScreen();
     }
     finaliza(produtos, caminho);
     return 0;

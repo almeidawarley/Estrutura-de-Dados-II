@@ -1,25 +1,28 @@
 # depslib dependency file v1.0
-1499623856 source:c:\users\almei\documents\github\estrutura-de-dados-ii\comercioeletronico\main.cpp
+1499649921 source:c:\users\almei\documents\github\estrutura-de-dados-ii\comercioeletronico\main.cpp
 	<iostream>
 	<string>
 	<fstream>
 	<vector>
+	<cstdlib>
+	<stdlib.h>
+	"Trie.h"
+	<conio.h>
+
+1499634064 source:c:\users\almei\documents\github\estrutura-de-dados-ii\comercioeletronico\trie.cpp
 	"Trie.h"
 
-1499623861 source:c:\users\almei\documents\github\estrutura-de-dados-ii\comercioeletronico\trie.cpp
-	"Trie.h"
-
-1499623527 c:\users\almei\documents\github\estrutura-de-dados-ii\comercioeletronico\trie.h
+1499634064 c:\users\almei\documents\github\estrutura-de-dados-ii\comercioeletronico\trie.h
 	"TrieNo.h"
 	<string>
 	<vector>
 	<iostream>
 	<stdlib.h>
 
-1499623422 c:\users\almei\documents\github\estrutura-de-dados-ii\comercioeletronico\trieno.h
+1499634064 c:\users\almei\documents\github\estrutura-de-dados-ii\comercioeletronico\trieno.h
 	<vector>
 
-1499623450 source:c:\users\almei\documents\github\estrutura-de-dados-ii\comercioeletronico\trieno.cpp
+1499634064 source:c:\users\almei\documents\github\estrutura-de-dados-ii\comercioeletronico\trieno.cpp
 	"TrieNo.h"
 	<stdlib.h>
 
