@@ -198,6 +198,77 @@ void buscarPorCategoria(vector<produto*> *produtos, Trie *iCategorias){
     }
 }
 
+void heapfy(vector<produto*> *v, int ind, int tam, int opcao){
+    int maior = ind;
+    int esq = 2 * ind + 1;
+    int dir = 2 * ind + 2;
+    string s1;
+    string s2;
+
+    if(opcao == 1){ ///nome
+        if(esq < tam && (*v)[ind]->nome < (*v)[esq]->nome)
+            maior = esq;
+        if(dir < tam && (*v)[maior]->nome < (*v)[dir]->nome)
+            maior = dir;
+    } else if (opcao == 2){ ///categoria
+        if(esq < tam && (*v)[ind]->categoria < (*v)[esq]->categoria)
+            maior = esq;
+        if(dir < tam && (*v)[maior]->categoria < (*v)[dir]->categoria)
+            maior = dir;
+    } else { ///CONFERIR COMPARACÕES ENTRE FLOATS
+        if(esq < tam && (*v)[ind]->preco < (*v)[esq]->preco)
+            maior = esq;
+        if(dir < tam && (*v)[maior]->preco < (*v)[dir]->preco)
+            maior = dir;
+    }
+
+
+    if(maior != ind){
+        produto* aux = (*v)[ind];
+        (*v)[ind] = (*v)[maior];
+        (*v)[maior] = aux;
+        heapfy(v, maior, tam, opcao);
+    }
+}
+
+
+void heapSort(vector<produto*> *v, int tam, int opcao){
+    for(int i = tam/2; i >=0; i--){
+        heapfy(v, i, tam, opcao);
+    }
+    while(tam > 0){
+        produto* aux = (*v)[0];
+        (*v)[0] = (*v)[tam-1];
+        (*v)[tam-1] = aux;
+        heapfy(v, 0, tam-1, opcao);
+        tam--;
+    }
+}
+
+
+void imprimeRelatorio(vector<produto*> *produtos, int ordem, int opcao){ // 1-crescente -  2-decrescente
+    vector<produto*> aux;
+
+    for(int i = 0; i < produtos->size(); i++){
+        aux.push_back((*produtos)[i]);
+    }
+
+    heapSort(&aux, aux.size(), opcao);
+
+    if(ordem == 1){
+        for(int i = 0; i < aux.size(); i++){
+            ///imprime as informações
+            cout << aux[i]->nome << " " << aux[i]->categoria << " " << aux[i]->preco << endl;
+        }
+    } else {
+        for(int i = aux.size()-1; i>=0; i--){
+            ///imprime as informações
+            cout << aux[i]->nome << " " << aux[i]->categoria << " " << aux[i]->preco << endl;
+        }
+    }
+
+}
+
 /*
 *Funcao para gerar relatório de todos os produtos na base
 *@param  vector<produto*> *produtos:    ponteiro para o vetor de produtos
@@ -205,8 +276,40 @@ void buscarPorCategoria(vector<produto*> *produtos, Trie *iCategorias){
 *********************************************************/
 void relatorio(vector<produto*> *produtos){
     cout << "RELATORIO..." << endl;
-    /// TODO: receber do usuário sobre qual característica deseja ordenar
-    /// e implementar sort (mergeSort ou heapSort) que leva em consideração a característica selecionada
+
+    int opcao = 0;
+    cout << "Escolha uma opcao abaixo: " << endl;
+    cout << "1) ordenado por nome" << endl;
+    cout << "2) ordenado por categoria" << endl;
+    cout << "3) ordenado por preco" << endl;
+    cout << "4) sair" << endl;
+    cout << "Digite sua escolha: ";
+    cin >> opcao;
+    cout << "***************************************************" << endl << endl;
+
+    if( opcao == 4 ) return;
+
+
+    int ordem = 0;
+    //while(opcao2 != 1 && opcao2 != 2){
+    cout << "Escolha uma opcao abaixo: " << endl;
+    cout << "1) ordenado crescente" << endl;
+    cout << "2) ordenado decrescente" << endl;
+    cin >> ordem;
+    //}
+
+    imprimeRelatorio(produtos, ordem, opcao);
+
+
+//    switch(opcao){
+//        case 1: imprimeRelatorio(produtos, opcao2, opcao); break;
+//        case 2: relatorioCategoria(produtos, opcao2, opcao); break;
+//       // case 3: relatorioPreco(produtos, opcao2); break;
+//        case 4: return;
+//        default: cout << "Opcao invalida" << endl; break;
+//    }
+
+
 }
 
 int main(){

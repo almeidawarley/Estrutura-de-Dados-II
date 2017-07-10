@@ -52,3 +52,20 @@
 	"TrieNo.h"
 	<stdlib.h>
 
+1499657531 source:c:\users\brunom\desktop\ed2\new folder\estrutura-de-dados-ii\comercioeletronico\trie.cpp
+	"Trie.h"
+
+1499657531 c:\users\brunom\desktop\ed2\new folder\estrutura-de-dados-ii\comercioeletronico\trie.h
+	"TrieNo.h"
+	<string>
+	<vector>
+	<iostream>
+	<stdlib.h>
+
+1499657531 c:\users\brunom\desktop\ed2\new folder\estrutura-de-dados-ii\comercioeletronico\trieno.h
+	<vector>
+
+1499657531 source:c:\users\brunom\desktop\ed2\new folder\estrutura-de-dados-ii\comercioeletronico\trieno.cpp
+	"TrieNo.h"
+	<stdlib.h>
+
