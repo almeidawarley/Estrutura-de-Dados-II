@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include "Trie.h"
 
-//!Não sei se funciona no linux
+//!Nï¿½o sei se funciona no linux
 #include<conio.h>
 
 using namespace std;
@@ -19,7 +19,7 @@ typedef struct sProduto{
     float preco;
 }produto;
 
-//joguei numa funcao porque, caso decidamos fazer outra coisa, dá pra alterar facilmente
+//joguei numa funcao porque, caso decidamos fazer outra coisa, dï¿½ pra alterar facilmente
 void clearScreen(){
     if(system("CLS")) system("clear");
 }
@@ -37,10 +37,10 @@ void imprimeBase(vector<produto*> *produtos){
 }
 
 /*
-*Funcao para ler a base de um caminho informado por parâmetro
+*Funcao para ler a base de um caminho informado por parï¿½metro
 *@param  vector<produto*> *produtos:    ponteiro para o vetor de produtos
-         Trie *iCategorias:             TRIE para indexação das categorias
-         Trie *iProdutos:               TRIE para indexação dos produtos
+         Trie *iCategorias:             TRIE para indexaï¿½ï¿½o das categorias
+         Trie *iProdutos:               TRIE para indexaï¿½ï¿½o dos produtos
          string caminho:                caminho do arquivo da base
 *@return -
 *********************************************************/
@@ -49,9 +49,8 @@ void lerBase(vector<produto*> *produtos, Trie *iCategorias, Trie *iProdutos, str
     string nome, categoria, descricao, preco, tamanho, enter;
     int numeroRegistros = 0;
     double meta = 0;
-    char quebra = (char) 10; // quebra de linha
-    getline(base, tamanho, ';');
-    getline(base, enter, quebra); // a ideia é ler o enter no final da linha para que não seja transportado para a string
+    char quebra = (char) '\n'; // quebra de linha
+    getline(base, tamanho);
     numeroRegistros = atoi(tamanho.c_str());
     produtos->reserve(numeroRegistros);
     register int indice = 0;
@@ -60,7 +59,7 @@ void lerBase(vector<produto*> *produtos, Trie *iCategorias, Trie *iProdutos, str
         getline(base, categoria, ';');
         getline(base, descricao, ';');
         getline(base, preco, ';');
-        getline(base, enter, quebra);
+        getline(base, enter, quebra); // a ideia Ã© ler o enter no final da linha para que nÃ£o seja transportado para a string
         produto * leitura = new produto;
         leitura->categoria = categoria;
         leitura->nome = nome;
@@ -76,11 +75,11 @@ void lerBase(vector<produto*> *produtos, Trie *iCategorias, Trie *iProdutos, str
         }
     }
     cout <<"\b\b\b\b100%"<< endl;
-    //imprimeBase(produtos);
+    // imprimeBase(produtos);
 }
 
 /*
-*Funcao para desalocar os produtos e atualizar a base conforme caminho informado por parâmetro
+*Funcao para desalocar os produtos e atualizar a base conforme caminho informado por parï¿½metro
 *@param  vector<produto*> *produtos:    ponteiro para o vetor de produtos
          string caminho:                caminho do arquivo da base
 *@return -
@@ -106,8 +105,8 @@ void finaliza(vector<produto*> produtos, string caminho){
 /*
 *Funcao para cadastrar novo produto na base
 *@param  vector<produto*> *produtos:    ponteiro para o vetor de produtos
-         Trie *iCategorias:             TRIE para indexação das categorias
-         Trie *iProdutos:               TRIE para indexação dos produtos
+         Trie *iCategorias:             TRIE para indexaï¿½ï¿½o das categorias
+         Trie *iProdutos:               TRIE para indexaï¿½ï¿½o dos produtos
 *@return -
 *********************************************************/
 void cadastrarProduto(vector<produto*> *produtos, Trie *iCategorias, Trie *iProdutos){
@@ -133,7 +132,7 @@ void cadastrarProduto(vector<produto*> *produtos, Trie *iCategorias, Trie *iProd
 /*
 *Funcao para buscar produto na base pelo nome
 *@param  vector<produto*> *produtos:    ponteiro para o vetor de produtos
-         Trie *iProdutos:               TRIE para indexação dos produtos
+         Trie *iProdutos:               TRIE para indexaï¿½ï¿½o dos produtos
 *@return -
 *********************************************************/
 void buscarPorNome(vector<produto*> *produtos, Trie *iProdutos){
@@ -141,9 +140,9 @@ void buscarPorNome(vector<produto*> *produtos, Trie *iProdutos){
     string nome;
     cout << "Digite o nome do produto que deseja procurar (digite '.' para finalizar o nome): "<<endl;
     //cin >> nome;
-    //!Ideia: Mas só funciona no windows
+    //!Ideia: Mas sï¿½ funciona no windows
     char c = getch(); //Algum equivalente no linux? getchar() espera o enter para ler as letras :/
-    clearScreen(); //Funciona no windows e no linux (mas não parece uma boa ideia)
+    clearScreen(); //Funciona no windows e no linux (mas nï¿½o parece uma boa ideia)
     while(c!='.'){
         cout << "Digite o nome do produto que deseja procurar (digite '.' para finalizar o nome): "<<endl;
         nome = nome+c;
@@ -155,7 +154,7 @@ void buscarPorNome(vector<produto*> *produtos, Trie *iProdutos){
         c = getch();
         clearScreen();
     }
-    //! Fim da ideia. Se não der substituir isso por cin>>nome (que está comentado ali em cima)
+    //! Fim da ideia. Se nï¿½o der substituir isso por cin>>nome (que estï¿½ comentado ali em cima)
 
 
     if(iProdutos->buscarPalavra(nome)){
@@ -179,7 +178,7 @@ void buscarPorNome(vector<produto*> *produtos, Trie *iProdutos){
 /*
 *Funcao para buscar produto na base pela categoria
 *@param  vector<produto*> *produtos:    ponteiro para o vetor de produtos
-         Trie *iCategorias:             TRIE para indexação das categorias
+         Trie *iCategorias:             TRIE para indexaï¿½ï¿½o das categorias
 *@return -
 *********************************************************/
 void buscarPorCategoria(vector<produto*> *produtos, Trie *iCategorias){
@@ -215,7 +214,7 @@ void heapfy(vector<produto*> *v, int ind, int tam, int opcao){
             maior = esq;
         if(dir < tam && (*v)[maior]->categoria < (*v)[dir]->categoria)
             maior = dir;
-    } else { ///CONFERIR COMPARACÕES ENTRE FLOATS
+    } else { ///CONFERIR COMPARACï¿½ES ENTRE FLOATS
         if(esq < tam && (*v)[ind]->preco < (*v)[esq]->preco)
             maior = esq;
         if(dir < tam && (*v)[maior]->preco < (*v)[dir]->preco)
@@ -257,12 +256,12 @@ void imprimeRelatorio(vector<produto*> *produtos, int ordem, int opcao){ // 1-cr
 
     if(ordem == 1){
         for(int i = 0; i < aux.size(); i++){
-            ///imprime as informações
+            ///imprime as informaï¿½ï¿½es
             cout << aux[i]->nome << " " << aux[i]->categoria << " " << aux[i]->preco << endl;
         }
     } else {
         for(int i = aux.size()-1; i>=0; i--){
-            ///imprime as informações
+            ///imprime as informaï¿½ï¿½es
             cout << aux[i]->nome << " " << aux[i]->categoria << " " << aux[i]->preco << endl;
         }
     }
@@ -270,7 +269,7 @@ void imprimeRelatorio(vector<produto*> *produtos, int ordem, int opcao){ // 1-cr
 }
 
 /*
-*Funcao para gerar relatório de todos os produtos na base
+*Funcao para gerar relatï¿½rio de todos os produtos na base
 *@param  vector<produto*> *produtos:    ponteiro para o vetor de produtos
 *@return -
 *********************************************************/

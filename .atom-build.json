@@ -1,0 +1,7 @@
+{
+  "cmd": "make.bat",
+  "sh": false,
+  "cwd": "{PROJECT_PATH}/comercioEletronico",
+  "errorMatch": "\\s*(c:)?(?<file>(?:[\\w-]*[\\\\/])*(?:[\\w-])+\\.(?:c|h|cc|cpp|cp|cxx|c\\+\\+|cu|cuh|hh|hpp|hxx|h\\+\\+|inl|ipp|tcc|tpp)):(?<line>\\d+):(?<col>\\d+): (error):\\s*(?<message>.*)",
+  "warningMatch": "\\s*(c:)?(?<file>(?:[\\w-]*[\\\\/])*(?:[\\w-])+\\.(?:c|h|cc|cpp|cp|cxx|c\\+\\+|cu|cuh|hh|hpp|hxx|h\\+\\+|inl|ipp|tcc|tpp)):(?<line>\\d+):(?<col>\\d+): (warning):\\s*(?<message>.*)"
+}
