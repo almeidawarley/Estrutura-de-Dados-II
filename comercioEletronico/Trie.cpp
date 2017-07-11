@@ -142,11 +142,14 @@ std::vector<std::string> Trie::completaPalavra(std::string palavra){
             }
         }
     }
-    if(aux == NULL) return palavras;
 
     //!Essa linha aqui faz o auto-completar sugerir o próprio prefixo caso ele já seja uma chave
     if(buscarPalavra(palavra)) palavras.push_back(palavra);
     //!
+
+
+    if(aux == NULL) return palavras;
+
 
     completaRecursivo(aux,palavra,&palavras);
     return palavras;
