@@ -1,4 +1,4 @@
-13
+14
 Telegrama;Inutil;CCC;3;
 Telescopio;Util;Muito util mesmo;5;
 Tele;Prefixo;Esse mesmo;1;
