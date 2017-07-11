@@ -143,36 +143,45 @@ void buscarPorNome(vector<produto*> *produtos, Trie *iProdutos){
     //!Ideia: Mas s� funciona no windows
     char c = getch(); //Algum equivalente no linux? getchar() espera o enter para ler as letras :/
     clearScreen(); //Funciona no windows e no linux (mas n�o parece uma boa ideia)
-    while(c!='.'){
-        cout << "Digite o nome do produto que deseja procurar (digite '.' para finalizar o nome): "<<endl;
-        nome = nome+c;
+    while(c!='\r'){
+        cout << "Digite o nome do produto que deseja procurar: "<<endl;
+        if (c == '\b') {
+            // Remove o ultimo caracter da string se a tecla pressionada for backspace
+            if (nome.size() > 0)
+                nome.erase(nome.end() - 1);
+        } else {
+            nome = nome+c;
+        }
         cout<<nome<<endl;
-        cout<<"Sugestoes:"<<endl;
-        vector<string> sugestoes = iProdutos->completaPalavra(nome);
-        for(unsigned int i = 0; i < sugestoes.size(); i++)
-            cout << i+1 << "] " << sugestoes[i] << endl;
+
+        if (nome.size() > 0) {
+            cout<<"Sugestoes:"<<endl;
+            vector<string> sugestoes = iProdutos->completaPalavra(nome);
+            for(unsigned int i = 0; i < sugestoes.size(); i++)
+                cout << i+1 << "] " << sugestoes[i] << endl;
+        }
         c = getch();
         clearScreen();
     }
     //! Fim da ideia. Se n�o der substituir isso por cin>>nome (que est� comentado ali em cima)
 
-
-    if(iProdutos->buscarPalavra(nome)){
-        vector<int> indices = iProdutos->recuperaIndices(nome);
-        cout << "Produtos encontrados! Informacoes: " << endl;
-        for(int k = 0; k < indices.size(); k++){
-            cout << " > Nome: " << (*produtos)[indices[k]]->nome << endl;
-            cout << " | Categoria: " << (*produtos)[indices[k]]->categoria << endl;
-            cout << " | Descricao: " << (*produtos)[indices[k]]->descricao << endl;
-            cout << " | Preco: " << (*produtos)[indices[k]]->preco << endl;
+    if (nome.size() > 0) {
+        if(iProdutos->buscarPalavra(nome)){
+            vector<int> indices = iProdutos->recuperaIndices(nome);
+            cout << "Produtos encontrados! Informacoes: " << endl;
+            for(int k = 0; k < indices.size(); k++){
+                cout << " > Nome: " << (*produtos)[indices[k]]->nome << endl;
+                cout << " | Categoria: " << (*produtos)[indices[k]]->categoria << endl;
+                cout << " | Descricao: " << (*produtos)[indices[k]]->descricao << endl;
+                cout << " | Preco: " << (*produtos)[indices[k]]->preco << endl;
+            }
+        }else{
+            cout << "Produto nao encontrado. Que tal: " << endl;
+            vector<string> retorno = iProdutos->completaPalavra(nome);
+            for(unsigned int i = 0; i < retorno.size(); i++)
+                cout << i+1 << "] " << retorno[i] << endl;
         }
-    }else{
-        cout << "Produto nao encontrado. Que tal: " << endl;
-        vector<string> retorno = iProdutos->completaPalavra(nome);
-        for(unsigned int i = 0; i < retorno.size(); i++)
-            cout << i+1 << "] " << retorno[i] << endl;
     }
-
 }
 
 /*
