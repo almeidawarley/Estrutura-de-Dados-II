@@ -1,4 +1,14 @@
-3
+13
 Telegrama;Inutil;CCC;3;
+Telescopio;Util;Muito util mesmo;5;
+Tele;Prefixo;Esse mesmo;1;
+Televisao;Eletrodomestico;Tv;18;
 Wendt;Orange;Juicy;10;
 Wendt;Pineapple;Igotapen;63;
+Aluminio;Metal;Aquele da tabela periodica;20;
+Travesseiro;Conforto;Bem confortavel;3;
+Telefone;Util;Serve pra ligar;13;
+Telas;Eletrodomestico;Igual a Tv;18;
+Telinha;Eletrodomestico;Versao reduzida da tela;15;
+Termistor;Eletronico;Componente eletronico;1;
+Termometro;Coisas;Serve pra medir temperatura;2;

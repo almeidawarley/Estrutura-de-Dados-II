@@ -115,7 +115,7 @@ void Trie::imprimeTrie(){
 
 
 void completaRecursivo(TrieNo* no,std::string atual,std::vector<std::string> *palavras){
-    if(no == NULL){
+    if(no == NULL || palavras->size() >= 8){
         return;
     }
     completaRecursivo(no->getDir(),atual,palavras);
@@ -174,4 +174,3 @@ std::vector<int> Trie::recuperaIndices(std::string palavra){
     }
     return anterior->getIndices();
 }
-
