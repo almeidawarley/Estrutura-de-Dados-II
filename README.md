@@ -3,7 +3,7 @@
 ## Código
 - [x] Resolver o uso do getch() no linux (Ela falou que só precisa funcionar no computador que vai ser usado para apresentar)
 - [ ] Se a busca retornar mais de um resultado, oferecer a opção de ordená-los pelo preço crescente ou decrescentemente
-- [ ] Sugerir palavras caso a busca não retorne nenhum resultado
+- [x] Sugerir palavras caso a busca não retorne nenhum resultado
 - [ ] Documentação do código
 
 ## Relatório
