@@ -12,7 +12,7 @@ class TrieNo
         void setEsq(TrieNo* no);
         void setDir(TrieNo* no);
         void setMeio(TrieNo* no);
-        void setChave(bool chave, int indice);
+        void setChave(int indice);
 
         //Gets
         TrieNo* getEsq();

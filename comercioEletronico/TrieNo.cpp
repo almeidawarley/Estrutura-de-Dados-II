@@ -16,14 +16,21 @@ TrieNo::~TrieNo()
 }
 
 
-//Setds:
+/*
+*Função para adicionar um indice no Nó e considerá-lo um nó-chave
+*@param  int indice: linha do arquivo onde se localiza o produto identificado pela chave
+*@return -
+*/
+void TrieNo::setChave(int indice){
+    ehChave = true;
+    indices.push_back(indice);
+}
+
+//Sets:
 void TrieNo::setEsq(TrieNo* no){esq = no;}
 void TrieNo::setDir(TrieNo* no){dir = no;}
 void TrieNo::setMeio(TrieNo* no){meio = no;}
-void TrieNo::setChave(bool chave, int indice){
-    ehChave = chave;
-    indices.push_back(indice);
-}
+
 
 //Gets:
 TrieNo* TrieNo::getEsq(){return esq;}

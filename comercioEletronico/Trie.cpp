@@ -10,7 +10,11 @@ Trie::~Trie()
     //dtor
 }
 
-
+/*
+*Função para buscar uma palavra na Trie
+*@param  string palavra:    palavra que será procurada na Trie
+*@return bool:              retorna true caso a palavra seja encontrada e false caso contrário
+*/
 bool Trie::buscarPalavra(std::string palavra){
     int tam = palavra.size();
     int i=0;
@@ -34,16 +38,21 @@ bool Trie::buscarPalavra(std::string palavra){
     else return false;
 }
 
-
+/*
+*Função para inserir uma palavra na Trie
+*@param string palavra: palavra que será inserida na Trie
+        int indice:     local do produto cuja chave está sendo inserida na Trie
+*@return -
+*/
 void Trie::inserirPalavra(std::string palavra, int indice){
     int tam = palavra.size();
     int i=0;
-    bool direita = false,desceu = false; //Indicadores dos caminhos tomados até o NULL
+    bool direita = false,desceu = false; //Indicadores dos caminhos a cada iteração do while
     TrieNo* aux = raiz;
-    TrieNo* aux2 = NULL;
+    TrieNo* anterior = NULL;
     //Busco o maior prefixo até chegar no NULL
     while(aux!=NULL && i<tam){
-        aux2 = aux;
+        anterior = aux;
         if(palavra[i]==aux->getLetra()){
             aux = aux->getMeio();
             desceu = true;
@@ -61,9 +70,9 @@ void Trie::inserirPalavra(std::string palavra, int indice){
         }
     }
 
-    //Se inseriu a palavra coloco que o anterior ao aux é fim de chave, e finalizo a função
+    //Se inseriu a palavra coloco que o anterior ao anterior é fim de chave, adicionando a posição do produto no vetor de indices do nó
     if(i == tam){
-        aux2->setChave(true, indice);
+        anterior->setChave(indice);
         return;
     }
 
@@ -72,7 +81,7 @@ void Trie::inserirPalavra(std::string palavra, int indice){
     TrieNo* novo = new TrieNo(palavra[i]);
     i++;
 
-    //Corrigindo ponteiros em relação ao nó não nulo criado
+    //Conectando o anterior ao novo nó criado
     if(aux2!=NULL && !desceu){
         if(direita) aux2->setDir(novo);
         else aux2->setEsq(novo);
@@ -80,6 +89,7 @@ void Trie::inserirPalavra(std::string palavra, int indice){
     if(aux2!=NULL && desceu){
         aux2->setMeio(novo);
     }
+    //Caso a Trie esteja vazia inicialmente colocamos o novo nó como raiz
     if(raiz == aux){
         raiz = novo;
     }
@@ -93,10 +103,16 @@ void Trie::inserirPalavra(std::string palavra, int indice){
         i++;
         aux = aux->getMeio();
     }
-    aux->setChave(true, indice);
+    aux->setChave(indice);
 
 }
 
+/*
+*Função auxliar da impressão da Trie, imprime recursivamente a partir de um nó
+*@param TrieNo* no:       nó que contém a nova letra a ser inserida na palavra atual
+        string atual:     palavra atual que será impressa quando chegar em uma chave
+*@return -
+*/
 void imprimeRecursivo(TrieNo* no,std::string atual = ""){
     if(no == NULL){
         return;
@@ -108,12 +124,23 @@ void imprimeRecursivo(TrieNo* no,std::string atual = ""){
     imprimeRecursivo(no->getMeio(),atual);
 }
 
+/*
+*Função de impressão da Trie, apenas imprime recursivamente a partir da raiz
+*@param -
+*@return -
+*/
 void Trie::imprimeTrie(){
     imprimeRecursivo(raiz);
 }
 
 
-
+/*
+*Função auxliar do completaPalavra, insere as palavras com o prefixo atual no vector palavras
+*@param TrieNo* no:             nó que contém a nova letra a ser inserida na palavra atual
+        string atual:           palavra atual que será inserida quando chegar em uma chave
+        vector<string> *atual:  ponteiro para um vector que irá acumular as palavras encontradas
+*@return -
+*/
 void completaRecursivo(TrieNo* no,std::string atual,std::vector<std::string> *palavras){
     if(no == NULL || palavras->size() >= 8){
         return;
@@ -125,6 +152,11 @@ void completaRecursivo(TrieNo* no,std::string atual,std::vector<std::string> *pa
     completaRecursivo(no->getMeio(),atual,palavras);
 }
 
+/*
+*Função de auto-completar que completa uma dada palavra ou o maior prefixo que é prefixo de alguma chave da trie
+*@param string palavra:  palavra que será completada pela trie (ou será utilizada para buscar uma sugestão)
+*@return vector<string>: armazena as sugestões de chaves da trie possíveis que completa um dado prefixo
+*/
 std::vector<std::string> Trie::completaPalavra(std::string palavra){
     int tam = palavra.size();
     int i=0;
@@ -132,9 +164,8 @@ std::vector<std::string> Trie::completaPalavra(std::string palavra){
     TrieNo *prev = aux;
     std::vector<std::string> palavras;
 
-    //!Essa linha aqui faz o auto-completar sugerir o próprio prefixo caso ele já seja uma chave
+    //Essa linha faz o auto-completar sugerir o próprio prefixo caso ele já seja uma chave
     if(buscarPalavra(palavra)) palavras.push_back(palavra);
-    //!
 
     while(aux!=NULL && i<tam){
         if(palavra[i]==aux->getLetra()){
@@ -159,12 +190,17 @@ std::vector<std::string> Trie::completaPalavra(std::string palavra){
 
 }
 
+/*
+*Função que recupera as posições(indices) de produtos com a chave encontrada na Trie
+*@param string palavra:  chave que será buscada cujos produtos serão retornados
+*@return vector<int>:    armazena as posições dos produtos encontradas na chave buscada
+*/
 std::vector<int> Trie::recuperaIndices(std::string palavra){
     int tam = palavra.size();
     int i=0;
     TrieNo* aux = raiz;
     TrieNo* anterior = NULL;
-    //Busco o maior prefixo até chegar no NULL
+    //Considero aqui que a palavra já está na Trie como chave
     while(aux!=NULL && i<tam){
         anterior = aux;
         if(palavra[i]==aux->getLetra()){
