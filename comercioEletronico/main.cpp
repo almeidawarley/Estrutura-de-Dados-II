@@ -4,14 +4,14 @@
 #include <vector>
 #include <cstdlib>
 #include <stdlib.h>
+#include <conio.h>
 #include "Trie.h"
-
-//!N�o sei se funciona no linux
-#include<conio.h>
 
 using namespace std;
 
-//Struct para armazenamento computacional do produto
+/*
+*Struct para armazenamento computacional dos produtos
+*********************************************************/
 typedef struct sProduto{
     string nome;
     string categoria;
@@ -19,21 +19,13 @@ typedef struct sProduto{
     float preco;
 }produto;
 
-//joguei numa funcao porque, caso decidamos fazer outra coisa, d� pra alterar facilmente
-void clearScreen(){
-    if(system("CLS")) system("clear");
-}
-
-
 /*
-*Funcao para imprimir a base atual de produtos
-*@param  vector<produto*> *produtos:    ponteiro para o vetor de produtos
+*Funcao para limpar a tela no Windows e no Linux
+*@param -
 *@return -
 *********************************************************/
-void imprimeBase(vector<produto*> *produtos){
-    for(unsigned int i = 0; i < produtos->size(); i++){
-        cout << (*produtos)[i]->nome << " | " << (*produtos)[i]->categoria << " | " << (*produtos)[i]->descricao << " | " << (*produtos)[i]->preco << endl;
-    }
+void clear(){
+    if(system("CLS")) system("clear");
 }
 
 /*
@@ -94,7 +86,7 @@ void finaliza(vector<produto*> produtos, string caminho){
         delete produtos[i];
         produtos[i] = NULL;
         if(i+1 != produtos.size()) saida << endl;
-        if((float)(produtos.size()-i)/produtos.size() > meta){
+        if((float)i/produtos.size() > meta){
             printf("\b\b\b\b%3.f%%", meta * 100);
             meta += 0.1;
         }
@@ -142,7 +134,7 @@ void buscarPorNome(vector<produto*> *produtos, Trie *iProdutos){
     //cin >> nome;
     //!Ideia: Mas s� funciona no windows
     char c = getch(); //Algum equivalente no linux? getchar() espera o enter para ler as letras :/
-    clearScreen(); //Funciona no windows e no linux (mas n�o parece uma boa ideia)
+    clear(); //Funciona no windows e no linux (mas n�o parece uma boa ideia)
     while(c!='\r'){
         cout << "Digite o nome do produto que deseja procurar: "<<endl;
         if (c == '\b') {
@@ -161,7 +153,7 @@ void buscarPorNome(vector<produto*> *produtos, Trie *iProdutos){
                 cout << i+1 << "] " << sugestoes[i] << endl;
         }
         c = getch();
-        clearScreen();
+        clear();
     }
     //! Fim da ideia. Se n�o der substituir isso por cin>>nome (que est� comentado ali em cima)
 
@@ -191,18 +183,47 @@ void buscarPorNome(vector<produto*> *produtos, Trie *iProdutos){
 *@return -
 *********************************************************/
 void buscarPorCategoria(vector<produto*> *produtos, Trie *iCategorias){
-    /// TODO: fazer o mesmo que for produzido no buscar por nome
     cout << "BUSCANDO POR CATEGORIA" << endl;
     string categoria;
-    cout << "Digite a categoria que deseja procurar: "; cin >> categoria;
-    if(iCategorias->buscarPalavra(categoria)){
-        cout << "Produto encontrado! Informacoes: " << endl;
-    }else{
-        cout << "Produto nao encontrado. Que tal: " << endl;
-        vector<string> retorno = iCategorias->completaPalavra(categoria);
-        for(unsigned int i = 0; i < retorno.size(); i++)
-            cout << i+1 << "] " << retorno[i] << endl;
+    cout << "Digite o nome do produto que deseja procurar (digite '.' para finalizar o nome): "<<endl;
+    char c = getch();
+    clear();
+    while(c!='\r'){
+        cout << "Digite o nome do produto que deseja procurar: "<<endl;
+        if (c == '\b') {
+            // Remove o ultimo caracter da string se a tecla pressionada for backspace
+            if (categoria.size() > 0)
+                categoria.erase(categoria.end() - 1);
+        } else {
+            categoria = categoria + c;
+        }
+        cout << categoria <<endl;
 
+        if (categoria.size() > 0) {
+            cout << "Sugestoes:" << endl;
+            vector<string> sugestoes = iCategorias->completaPalavra(categoria);
+            for(unsigned int i = 0; i < sugestoes.size(); i++)
+                cout << i+1 << "] " << sugestoes[i] << endl;
+        }
+        c = getch();
+        clear();
+    }
+    if (categoria.size() > 0) {
+        if(iCategorias->buscarPalavra(categoria)){
+            vector<int> indices = iCategorias->recuperaIndices(categoria);
+            cout << "Produtos encontrados! Informacoes: " << endl;
+            for(int k = 0; k < indices.size(); k++){
+                cout << " > Nome: " << (*produtos)[indices[k]]->nome << endl;
+                cout << " | Categoria: " << (*produtos)[indices[k]]->categoria << endl;
+                cout << " | Descricao: " << (*produtos)[indices[k]]->descricao << endl;
+                cout << " | Preco: " << (*produtos)[indices[k]]->preco << endl;
+            }
+        }else{
+            cout << "Produto nao encontrado. Que tal: " << endl;
+            vector<string> retorno = iCategorias->completaPalavra(categoria);
+            for(unsigned int i = 0; i < retorno.size(); i++)
+                cout << i+1 << "] " << retorno[i] << endl;
+        }
     }
 }
 
@@ -290,7 +311,7 @@ void relatorio(vector<produto*> *produtos){
     cout << "1) ordenado por nome" << endl;
     cout << "2) ordenado por categoria" << endl;
     cout << "3) ordenado por preco" << endl;
-    cout << "4) sair" << endl;
+    cout << "4) salvar e sair" << endl;
     cout << "Digite sua escolha: ";
     cin >> opcao;
     cout << "***************************************************" << endl << endl;
@@ -358,7 +379,7 @@ int main(){
             case 2: finaliza(produtos, caminho); return 0;
             default: break;
         }
-        clearScreen();
+        clear();
     }
     finaliza(produtos, caminho);
     return 0;

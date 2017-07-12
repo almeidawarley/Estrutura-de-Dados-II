@@ -82,12 +82,12 @@ void Trie::inserirPalavra(std::string palavra, int indice){
     i++;
 
     //Conectando o anterior ao novo nó criado
-    if(aux2!=NULL && !desceu){
-        if(direita) aux2->setDir(novo);
-        else aux2->setEsq(novo);
+    if(anterior!=NULL && !desceu){
+        if(direita) anterior->setDir(novo);
+        else anterior->setEsq(novo);
     }
-    if(aux2!=NULL && desceu){
-        aux2->setMeio(novo);
+    if(anterior!=NULL && desceu){
+        anterior->setMeio(novo);
     }
     //Caso a Trie esteja vazia inicialmente colocamos o novo nó como raiz
     if(raiz == aux){
@@ -97,7 +97,7 @@ void Trie::inserirPalavra(std::string palavra, int indice){
 
     //Insiro o restante da palavra criando os níveis inferiores
     while(i<tam){
-        aux2 = aux;
+        anterior = aux;
         TrieNo* novo = new TrieNo(palavra[i]);
         aux->setMeio(novo);
         i++;
