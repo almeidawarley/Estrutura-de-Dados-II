@@ -128,11 +128,19 @@ void completaRecursivo(TrieNo* no,std::string atual,std::vector<std::string> *pa
 std::vector<std::string> Trie::completaPalavra(std::string palavra){
     int tam = palavra.size();
     int i=0;
-    TrieNo* aux = raiz;
+    TrieNo *aux = raiz;
+    TrieNo *prev = aux;
     std::vector<std::string> palavras;
+
+    //!Essa linha aqui faz o auto-completar sugerir o próprio prefixo caso ele já seja uma chave
+    if(buscarPalavra(palavra)) palavras.push_back(palavra);
+    //!
+
     while(aux!=NULL && i<tam){
         if(palavra[i]==aux->getLetra()){
+            // Atualiza o ponteiro "prev" apenas quando encontrar uma letra
             aux = aux->getMeio();
+            prev = aux;
             i++;
         }else{
             if(palavra[i]>aux->getLetra()){
@@ -142,13 +150,11 @@ std::vector<std::string> Trie::completaPalavra(std::string palavra){
             }
         }
     }
-    if(aux == NULL) return palavras;
-
-    //!Essa linha aqui faz o auto-completar sugerir o próprio prefixo caso ele já seja uma chave
-    if(buscarPalavra(palavra)) palavras.push_back(palavra);
-    //!
-
-    completaRecursivo(aux,palavra,&palavras);
+    if (aux == NULL) {
+        completaRecursivo(prev, palavra.substr(0, i), &palavras);
+    } else {
+        completaRecursivo(aux, palavra, &palavras);
+    }
     return palavras;
 
 }

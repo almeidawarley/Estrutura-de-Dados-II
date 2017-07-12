@@ -1,4 +1,4 @@
-13
+14
 Telegrama;Inutil;CCC;3;
 Telescopio;Util;Muito util mesmo;5;
 Tele;Prefixo;Esse mesmo;1;
@@ -12,3 +12,4 @@ Telas;Eletrodomestico;Igual a Tv;18;
 Telinha;Eletrodomestico;Versao reduzida da tela;15;
 Termistor;Eletronico;Componente eletronico;1;
 Termometro;Coisas;Serve pra medir temperatura;2;
+Vidro;Coisas;Se tiver limpo eh transparente;7;
