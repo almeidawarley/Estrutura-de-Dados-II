@@ -11,7 +11,7 @@
 
 >[Instâncias para teste](https://www.dropbox.com/s/qry7ahw1ieqgu8l/instancias.rar?dl=0)
 
->[Relatório no Latex](https://pt.sharelatex.com/project/5965110ffbe6df794a9e4715)
+>[Relatório no Latex](https://pt.sharelatex.com/project/59664f1cc7d3657046d9618f)
 
 - [ ] Preencher tabela dos testes de tempo de ordenação (Bruno?)
 - [ ] Preencher tabela dos testes de tempo de busca (Warley?)
