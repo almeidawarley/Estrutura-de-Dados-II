@@ -3,6 +3,8 @@
 #include <fstream>
 #include <vector>
 #include <cstdlib>
+#include <algorithm>
+#include <sstream>
 #include <stdlib.h>
 #include <conio.h>
 #include "Trie.h"
@@ -107,7 +109,27 @@ void cadastrarProduto(Trie *iCategorias, Trie *iProdutos, string caminho, int *n
     iCategorias->inserirPalavra(aCadastrar->categoria,(*numeroRegistros));
     iProdutos->inserirPalavra(aCadastrar->nome,(*numeroRegistros));
     ofstream base(caminho.c_str(), ios::app);
-    base << padString(aCadastrar->nome, 50) << ";" << padString(aCadastrar->categoria, 20) << ";" << padString(aCadastrar->descricao, 200) << ";" << aCadastrar->preco << ";" << endl;
+    base << padString(aCadastrar->nome, 50) << ";" << padString(aCadastrar->categoria, 20) << ";" << padString(aCadastrar->descricao, 500) << ";" << aCadastrar->preco << ";" << endl;
+}
+
+/*
+*Funcao para recuperar as informações de um produto no arquivo a partir do índice (linha)
+*@param  string caminho:  caminho para o arquivo que contém a base
+         int linha:       linha do arquivo onde estão as informações
+*@return produto: retorna uma struct com os dados obtidos da linha fornecida
+*********************************************************/
+produto getProduto(string caminho, int linha){
+    ifstream base(caminho);
+    string linhaDescartavel;
+    string linhaProduto;
+    base>>linhaDescartavel;
+    int pular = linhaDescartavel.size()+2; //descartar também \n e \r
+    getline(base.seekg(pular+583*(linha-1)), linhaProduto, '\n'); //onde 583 é a quantidade de caracteres em cada linha de produto
+    produto resultado;
+    replace(linhaProduto.begin(), linhaProduto.end(), ';', ' ');
+    stringstream leitura(linhaProduto);
+    leitura>>resultado.nome>>resultado.categoria>>resultado.descricao>>resultado.preco;
+    return resultado;
 }
 
 /*
@@ -151,10 +173,11 @@ void buscarPorNome(string caminho, Trie *iProdutos){
             vector<int> indices = iProdutos->recuperaIndices(nome);
             cout << "Produtos encontrados! Informacoes: " << endl;
             for(int k = 0; k < indices.size(); k++){
-//                cout << " > Nome: " << (*produtos)[indices[k]]->nome << endl;
-//                cout << " | Categoria: " << (*produtos)[indices[k]]->categoria << endl;
-//                cout << " | Descricao: " << (*produtos)[indices[k]]->descricao << endl;
-//                cout << " | Preco: " << (*produtos)[indices[k]]->preco << endl;
+                produto resultado = getProduto(caminho,indices[k]);
+                cout << " > Nome: " << resultado.nome << endl;
+                cout << " | Categoria: " << resultado.categoria << endl;
+                cout << " | Descricao: " << resultado.descricao << endl;
+                cout << " | Preco: " << resultado.preco << endl;
             }
         }else{
             cout << "Produto nao encontrado. Que tal: " << endl;
@@ -203,10 +226,11 @@ void buscarPorCategoria(string caminho, Trie *iCategorias){
             vector<int> indices = iCategorias->recuperaIndices(categoria);
             cout << "Produtos encontrados! Informacoes: " << endl;
             for(int k = 0; k < indices.size(); k++){
-//                cout << " > Nome: " << (*produtos)[indices[k]]->nome << endl;
-//                cout << " | Categoria: " << (*produtos)[indices[k]]->categoria << endl;
-//                cout << " | Descricao: " << (*produtos)[indices[k]]->descricao << endl;
-//                cout << " | Preco: " << (*produtos)[indices[k]]->preco << endl;
+                produto resultado = getProduto(caminho,indices[k]);
+                cout << " > Nome: " << resultado.nome << endl;
+                cout << " | Categoria: " << resultado.categoria << endl;
+                cout << " | Descricao: " << resultado.descricao << endl;
+                cout << " | Preco: " << resultado.preco << endl;
             }
         }else{
             cout << "Produto nao encontrado. Que tal: " << endl;
