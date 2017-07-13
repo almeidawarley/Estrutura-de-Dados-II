@@ -29,6 +29,22 @@ void clear(){
 }
 
 /*
+*Funcao para preencher uma string com caracteres vazios
+*@param  string palavra:    string que sera preenchida
+*@param  int tamanho:       tamanho da string de retorno
+*@param  char caracter:     caracter que sera usado para preencher a string
+*@return string:            string do tamanho especificado preenchida com caracteres vazios
+*********************************************************/
+string padString(string palavra, int tamanho, char caracter = '\0')
+{
+    // A string precisa ser menor ou igual ao tamanho final
+    if (palavra.size() < tamanho)
+        return palavra + std::string(tamanho - palavra.size(), caracter);
+    else
+        return palavra;
+}
+
+/*
 *Funcao para ler a base de um caminho informado por par�metro
 *@param  vector<produto*> *produtos:    ponteiro para o vetor de produtos
          Trie *iCategorias:             TRIE para indexa��o das categorias
@@ -91,7 +107,7 @@ void cadastrarProduto(Trie *iCategorias, Trie *iProdutos, string caminho, int *n
     iCategorias->inserirPalavra(aCadastrar->categoria,(*numeroRegistros));
     iProdutos->inserirPalavra(aCadastrar->nome,(*numeroRegistros));
     ofstream base(caminho.c_str(), ios::app);
-    base << aCadastrar->nome << ";"<<aCadastrar->categoria<<";"<<aCadastrar->descricao<<";"<<aCadastrar->preco<<";"<<endl;
+    base << padString(aCadastrar->nome, 50) << ";" << padString(aCadastrar->categoria, 20) << ";" << padString(aCadastrar->descricao, 200) << ";" << aCadastrar->preco << ";" << endl;
 }
 
 /*
