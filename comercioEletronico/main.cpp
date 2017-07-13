@@ -8,19 +8,10 @@
 #include <stdlib.h>
 #include <conio.h>
 #include <iomanip>
+#include "sortExterno.hpp"
 #include "Trie.h"
 
 using namespace std;
-
-/*
-*Struct para armazenamento computacional dos produtos
-*********************************************************/
-typedef struct sProduto{
-    string nome;
-    string categoria;
-    string descricao;
-    float preco;
-}produto;
 
 /*
 *Funcao para limpar a tela no Windows e no Linux
@@ -48,10 +39,9 @@ string padString(string palavra, int tamanho, char caracter = '\0')
 }
 
 /*
-*Funcao para ler a base de um caminho informado por par�metro
-*@param  vector<produto*> *produtos:    ponteiro para o vetor de produtos
-         Trie *iCategorias:             TRIE para indexa��o das categorias
-         Trie *iProdutos:               TRIE para indexa��o dos produtos
+*Funcao para ler a base de um caminho informado por parametro
+*@param  Trie *iCategorias:             TRIE para indexacao das categorias
+         Trie *iProdutos:               TRIE para indexacao dos produtos
          string caminho:                caminho do arquivo da base
 *@return -
 *********************************************************/
@@ -70,8 +60,8 @@ int lerBase(Trie *iCategorias, Trie *iProdutos, string caminho){
         getline(base, descricao, ';');
         getline(base, preco, ';');
         getline(base, enter, quebra);
-        iCategorias->inserirPalavra(categoria, indice);
-        iProdutos->inserirPalavra(nome, indice);
+        iCategorias->inserirPalavra(categoria.substr(0,categoria.find('\0')), indice);
+        iProdutos->inserirPalavra(nome.substr(0,nome.find('\0')) , indice);
         if((float)indice/numeroRegistros > meta){
             printf("\b\b\b\b%3.f%%", meta * 100);
             meta += 0.1;
@@ -84,9 +74,10 @@ int lerBase(Trie *iCategorias, Trie *iProdutos, string caminho){
 
 /*
 *Funcao para cadastrar novo produto na base
-*@param  vector<produto*> *produtos:    ponteiro para o vetor de produtos
-         Trie *iCategorias:             TRIE para indexa��o das categorias
-         Trie *iProdutos:               TRIE para indexa��o dos produtos
+*@param  Trie *iCategorias:             TRIE para indexacao das categorias
+         Trie *iProdutos:               TRIE para indexacao dos produtos
+         string caminho:                caminho do arquivo da base
+         int *numeroRegistros:          ponteiro para inteiro que contem número de registros da base
 *@return -
 *********************************************************/
 void cadastrarProduto(Trie *iCategorias, Trie *iProdutos, string caminho, int *numeroRegistros){
@@ -109,9 +100,14 @@ void cadastrarProduto(Trie *iCategorias, Trie *iProdutos, string caminho, int *n
     (*numeroRegistros) += 1;
     iCategorias->inserirPalavra(aCadastrar->categoria,(*numeroRegistros));
     iProdutos->inserirPalavra(aCadastrar->nome,(*numeroRegistros));
-    ofstream base(caminho.c_str(), ios::app);
+    fstream base(caminho.c_str(), ios::app);
     base << padString(aCadastrar->nome, 50) << ";" << padString(aCadastrar->categoria, 20) << ";" << padString(aCadastrar->descricao, 500) << ";";
     base << setw(7) << setfill('0') << setprecision(3) << aCadastrar->preco << ";" << endl;
+
+    base.close();
+    fstream registro(caminho.c_str());
+    registro << (*numeroRegistros) << endl;
+    registro.close();
 }
 
 /*
@@ -120,7 +116,7 @@ void cadastrarProduto(Trie *iCategorias, Trie *iProdutos, string caminho, int *n
          int linha:       linha do arquivo onde estão as informações
 *@return produto: retorna uma struct com os dados obtidos da linha fornecida
 *********************************************************/
-produto getProduto(string caminho, int linha){
+string getProduto(string caminho, int linha){
     ifstream base(caminho.c_str());
     string linhaDescartavel;
     string linhaProduto;
@@ -128,26 +124,68 @@ produto getProduto(string caminho, int linha){
     int pular = linhaDescartavel.size()+2; //descartar também \n e \r
     getline(base.seekg(pular+583*(linha-1)), linhaProduto, '\n'); //onde 583 é a quantidade de caracteres em cada linha de produto
     produto resultado;
-    replace(linhaProduto.begin(), linhaProduto.end(), ';', ' ');
-    stringstream leitura(linhaProduto);
-    leitura>>resultado.nome>>resultado.categoria>>resultado.descricao>>resultado.preco;
-    return resultado;
+    return linhaProduto;
+}
+
+/*
+*Funcao para imprimir o relatorio do resultado da busca
+*@param  string caminho:        caminho do arquivo da base
+*@return -
+*********************************************************/
+void imprimeBuscaNaoOrdenada(string caminho){
+    ifstream base;
+    base.open(caminho);
+    string nome, categoria, descricao, preco,tamanho,enter;
+    char quebra = (char) '\n';
+    getline(base,tamanho,quebra);
+    while(getline(base, nome, ';')){
+        getline(base, categoria, ';');
+        getline(base, descricao, ';');
+        getline(base, preco, ';');
+        getline(base, enter, quebra);
+        cout << " > Nome: " << nome << endl;
+        cout << " | Categoria: " << categoria << endl;
+        cout << " | Descricao: " << descricao << endl;
+        cout << " | Preco: " << strtof(preco.c_str(),0) << endl;
+    }
+}
+
+/*
+*Funcao para imprimir o relatorio do resultado da busca de forma ordenada por preco
+*@param  string caminho:        caminho do arquivo da base
+         int ordem     :        ordem de ordenação (1: crescente |2: decrescente)
+*@return -
+*********************************************************/
+void imprimeBuscaOrdenada(string caminho, int ordem){
+    sortExterno(caminho, "buscaOrdenada.txt", 500000, 3, ordem);
+    ifstream base;
+    base.open("buscaOrdenada.txt");
+    string nome, categoria, descricao, preco, tamanho, enter;
+    char quebra = (char) '\n';
+    while(getline(base, nome, ';')){
+        getline(base, categoria, ';');
+        getline(base, descricao, ';');
+        getline(base, preco, ';');
+        getline(base, enter, quebra);
+        cout << " > Nome: " << nome << endl;
+        cout << " | Categoria: " << categoria << endl;
+        cout << " | Descricao: " << descricao << endl;
+        cout << " | Preco: " << strtof(preco.c_str(),0) << endl;
+    }
 }
 
 /*
 *Funcao para buscar produto na base pelo nome
-*@param  vector<produto*> *produtos:    ponteiro para o vetor de produtos
-         Trie *iProdutos:               TRIE para indexa��o dos produtos
+*@param  string caminho                 caminho do arquivo da base
+         Trie *iProdutos:               TRIE para indexacao dos produtos
 *@return -
 *********************************************************/
 void buscarPorNome(string caminho, Trie *iProdutos){
     cout << "BUSCANDO POR NOME..." << endl;
     string nome;
     cout << "Digite o nome do produto que deseja procurar (digite '.' para finalizar o nome): "<<endl;
-    //cin >> nome;
-    //!Ideia: Mas s� funciona no windows
-    char c = getch(); //Algum equivalente no linux? getchar() espera o enter para ler as letras :/
-    clear(); //Funciona no windows e no linux (mas n�o parece uma boa ideia)
+    char c = getch();
+    clear();
     while(c!='\r'){
         cout << "Digite o nome do produto que deseja procurar: "<<endl;
         if (c == '\b') {
@@ -168,32 +206,48 @@ void buscarPorNome(string caminho, Trie *iProdutos){
         c = getch();
         clear();
     }
-    //! Fim da ideia. Se n�o der substituir isso por cin>>nome (que est� comentado ali em cima)
-
     if (nome.size() > 0) {
         if(iProdutos->buscarPalavra(nome)){
             vector<int> indices = iProdutos->recuperaIndices(nome);
-            cout << "Produtos encontrados! Informacoes: " << endl;
-            for(int k = 0; k < indices.size(); k++){
-                produto resultado = getProduto(caminho,indices[k]);
-                cout << " > Nome: " << resultado.nome << endl;
-                cout << " | Categoria: " << resultado.categoria << endl;
-                cout << " | Descricao: " << resultado.descricao << endl;
-                cout << " | Preco: " << resultado.preco << endl;
+            ofstream auxArquivo;
+            auxArquivo.open("resultadoBusca.txt");
+            auxArquivo<<indices.size()<<endl;
+            for(int i = 0;i<indices.size();i++){
+                auxArquivo<<getProduto(caminho,indices[i])<<endl;
+            }
+            auxArquivo.close();
+            if(indices.size()>1){
+                cout<< "Varios produtos encontrados! Voce deseja ordena-los por preco? [1 para sim e 0 para nao]"<<endl;
+                bool ordenar;
+                cin>>ordenar;
+                if(ordenar){
+                    cout<<"Deseja ordenar crescente[1] ou decrescentemente[2]?"<<endl;
+                    int ordem;
+                    cin>>ordem;
+                    imprimeBuscaOrdenada("resultadoBusca.txt",ordem);
+                }else{
+                    imprimeBuscaNaoOrdenada("resultadoBusca.txt");
+                }
+
+            }else{
+                cout << "Produtos encontrados! Informacoes: " << endl;
+                imprimeBuscaNaoOrdenada("resultadoBusca.txt");
             }
         }else{
             cout << "Produto nao encontrado. Que tal: " << endl;
             vector<string> retorno = iProdutos->completaPalavra(nome);
             for(unsigned int i = 0; i < retorno.size(); i++)
-                cout << i+1 << "] " << retorno[i] << endl;
+                cout << i+1 << "] " << retorno[i] <<endl;
         }
     }
 }
 
+
+
 /*
 *Funcao para buscar produto na base pela categoria
-*@param  vector<produto*> *produtos:    ponteiro para o vetor de produtos
-         Trie *iCategorias:             TRIE para indexa��o das categorias
+*@param  string caminho                 caminho do arquivo da base
+         Trie *iCategorias:             TRIE para indexacao das categorias
 *@return -
 *********************************************************/
 void buscarPorCategoria(string caminho, Trie *iCategorias){
@@ -226,13 +280,25 @@ void buscarPorCategoria(string caminho, Trie *iCategorias){
     if (categoria.size() > 0) {
         if(iCategorias->buscarPalavra(categoria)){
             vector<int> indices = iCategorias->recuperaIndices(categoria);
-            cout << "Produtos encontrados! Informacoes: " << endl;
-            for(int k = 0; k < indices.size(); k++){
-                produto resultado = getProduto(caminho,indices[k]);
-                cout << " > Nome: " << resultado.nome << endl;
-                cout << " | Categoria: " << resultado.categoria << endl;
-                cout << " | Descricao: " << resultado.descricao << endl;
-                cout << " | Preco: " << resultado.preco << endl;
+            ofstream auxArquivo;
+            auxArquivo.open("resultadoBusca.txt");
+            auxArquivo<<indices.size()<<endl;
+            for(int i = 0;i<indices.size();i++){
+                auxArquivo<<getProduto(caminho,indices[i])<<endl;
+            }
+            auxArquivo.close();
+            if(indices.size()>1){
+                cout<< "Varios produtos encontrados! Voce deseja ordena-los por preco? [1 para sim e 0 para nao]"<<endl;
+                bool ordenar;
+                cin>>ordenar;
+                if(ordenar){
+                    cout<<"Deseja ordenar crescente[1] ou decrescentemente[2]?"<<endl;
+                    int ordem;
+                    cin>>ordem;
+                    imprimeBuscaOrdenada("resultadoBusca.txt",ordem);
+                }else{
+                    imprimeBuscaNaoOrdenada("resultadoBusca.txt");
+                }
             }
         }else{
             cout << "Produto nao encontrado. Que tal: " << endl;
@@ -244,94 +310,41 @@ void buscarPorCategoria(string caminho, Trie *iCategorias){
 }
 
 /*
-*Funcao para desalocar os produtos e atualizar a base conforme caminho informado por par�metro
-*@param  vector<produto*> *produtos:    ponteiro para o vetor de produtos
-         string caminho:                caminho do arquivo da base
+*Funcao para imprimir o relatorio de todos os produtos na base de dados de forma ordenada
+*@param  string caminho:        caminho do arquivo da base
+         int ordem     :        ordem de ordenação (1: crescente |2: decrescente)
+         int opcao     :        parametro a ser ordenado (1:nome |2:categoria |3:preco)
 *@return -
 *********************************************************/
-void finaliza(string caminho, int numeroRegistros){
-    fstream base(caminho.c_str());
-    base << numeroRegistros << endl;
-
-}
-
-void heapfy(vector<produto*> *v, int ind, int tam, int opcao){
-    int maior = ind;
-    int esq = 2 * ind + 1;
-    int dir = 2 * ind + 2;
-    string s1;
-    string s2;
-
-    if(opcao == 1){ ///nome
-        if(esq < tam && (*v)[ind]->nome < (*v)[esq]->nome)
-            maior = esq;
-        if(dir < tam && (*v)[maior]->nome < (*v)[dir]->nome)
-            maior = dir;
-    } else if (opcao == 2){ ///categoria
-        if(esq < tam && (*v)[ind]->categoria < (*v)[esq]->categoria)
-            maior = esq;
-        if(dir < tam && (*v)[maior]->categoria < (*v)[dir]->categoria)
-            maior = dir;
-    } else { ///CONFERIR COMPARAC�ES ENTRE FLOATS
-        if(esq < tam && (*v)[ind]->preco < (*v)[esq]->preco)
-            maior = esq;
-        if(dir < tam && (*v)[maior]->preco < (*v)[dir]->preco)
-            maior = dir;
-    }
-
-
-    if(maior != ind){
-        produto* aux = (*v)[ind];
-        (*v)[ind] = (*v)[maior];
-        (*v)[maior] = aux;
-        heapfy(v, maior, tam, opcao);
-    }
-}
-
-
-void heapSort(vector<produto*> *v, int tam, int opcao){
-    for(int i = tam/2; i >=0; i--){
-        heapfy(v, i, tam, opcao);
-    }
-    while(tam > 0){
-        produto* aux = (*v)[0];
-        (*v)[0] = (*v)[tam-1];
-        (*v)[tam-1] = aux;
-        heapfy(v, 0, tam-1, opcao);
-        tam--;
-    }
-}
-
-
-void imprimeRelatorio(vector<produto*> *produtos, int ordem, int opcao){ // 1-crescente -  2-decrescente
+void imprimeRelatorio(string caminho, int ordem, int opcao){ // 1-crescente -  2-decrescente
     vector<produto*> aux;
 
-    for(int i = 0; i < produtos->size(); i++){
-        aux.push_back((*produtos)[i]);
-    }
+    sortExterno(caminho, "baseOrdenada.txt", 500000, opcao, ordem);
+    ifstream base;
+    base.open("baseOrdenada.txt");
+    string nome, categoria, descricao, preco, tamanho, enter;
+    char quebra = (char) '\n';
 
-    heapSort(&aux, aux.size(), opcao);
+    while(getline(base, nome, ';')){
+        getline(base, categoria, ';');
+        getline(base, descricao, ';');
+        getline(base, preco, ';');
+        getline(base, enter, quebra);
+        cout << " > Nome: " << nome << endl;
+        cout << " | Categoria: " << categoria << endl;
+        cout << " | Descricao: " << descricao.substr(0,25) << endl;
+        cout << " | Preco: " << strtof(preco.c_str(),0) << endl << endl;
 
-    if(ordem == 1){
-        for(int i = 0; i < aux.size(); i++){
-            ///imprime as informa��es
-            cout << aux[i]->nome << " " << aux[i]->categoria << " " << aux[i]->preco << endl;
-        }
-    } else {
-        for(int i = aux.size()-1; i>=0; i--){
-            ///imprime as informa��es
-            cout << aux[i]->nome << " " << aux[i]->categoria << " " << aux[i]->preco << endl;
-        }
     }
 
 }
 
 /*
-*Funcao para gerar relat�rio de todos os produtos na base
-*@param  vector<produto*> *produtos:    ponteiro para o vetor de produtos
+*Funcao para gerar relatorio de todos os produtos na base
+*@param  string caminho:    caminho do arquivo da base
 *@return -
 *********************************************************/
-void relatorio(vector<produto*> *produtos){
+void relatorio(string caminho){
     cout << "RELATORIO..." << endl;
 
     int opcao = 0;
@@ -348,28 +361,16 @@ void relatorio(vector<produto*> *produtos){
 
 
     int ordem = 0;
-    //while(opcao2 != 1 && opcao2 != 2){
     cout << "Escolha uma opcao abaixo: " << endl;
     cout << "1) ordenado crescente" << endl;
     cout << "2) ordenado decrescente" << endl;
     cin >> ordem;
-    //}
 
-    imprimeRelatorio(produtos, ordem, opcao);
-
-
-//    switch(opcao){
-//        case 1: imprimeRelatorio(produtos, opcao2, opcao); break;
-//        case 2: relatorioCategoria(produtos, opcao2, opcao); break;
-//       // case 3: relatorioPreco(produtos, opcao2); break;
-//        case 4: return;
-//        default: cout << "Opcao invalida" << endl; break;
-//    }
-
-
+    imprimeRelatorio(caminho, ordem, opcao);
 }
 
 int main(){
+    std::cout << std::setprecision(2) << std::fixed;
     int opcao = 0;
     string caminho;
     cout << "***************************************************" << endl;
@@ -393,8 +394,8 @@ int main(){
             case 1: cadastrarProduto(&iCategorias, &iProdutos, caminho, &numeroRegistros); break;
             case 2: buscarPorNome(caminho, &iProdutos); break;
             case 3: buscarPorCategoria(caminho, &iCategorias); break;
-            case 4: relatorio(&produtos); break;
-            case 5: finaliza(caminho, numeroRegistros); return 0;
+            case 4: relatorio(caminho); break;
+            case 5: return 0;
             default: cout << "Opcao invalida, tente novamente" << endl;
         }
         cout << "***************************************************" << endl;
@@ -404,11 +405,10 @@ int main(){
         cin >> opcao;
         cout << "***************************************************" << endl;
         switch(opcao){
-            case 2: finaliza(caminho, numeroRegistros); return 0;
+            case 2: return 0;
             default: break;
         }
         clear();
     }
-    finaliza(caminho, numeroRegistros);
     return 0;
 }
