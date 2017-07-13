@@ -1,12 +1,15 @@
 # depslib dependency file v1.0
-1499915620 source:c:\users\almei\documents\github\estrutura-de-dados-ii\comercioeletronico\main.cpp
+1499923145 source:c:\users\almei\documents\github\estrutura-de-dados-ii\comercioeletronico\main.cpp
 	<iostream>
 	<string>
 	<fstream>
 	<vector>
 	<cstdlib>
+	<algorithm>
+	<sstream>
 	<stdlib.h>
 	<conio.h>
+	<iomanip>
 	"Trie.h"
 
 1499889083 source:c:\users\almei\documents\github\estrutura-de-dados-ii\comercioeletronico\trie.cpp

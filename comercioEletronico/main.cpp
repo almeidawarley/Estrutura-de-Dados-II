@@ -7,6 +7,7 @@
 #include <sstream>
 #include <stdlib.h>
 #include <conio.h>
+#include <iomanip>
 #include "Trie.h"
 
 using namespace std;
@@ -109,7 +110,8 @@ void cadastrarProduto(Trie *iCategorias, Trie *iProdutos, string caminho, int *n
     iCategorias->inserirPalavra(aCadastrar->categoria,(*numeroRegistros));
     iProdutos->inserirPalavra(aCadastrar->nome,(*numeroRegistros));
     ofstream base(caminho.c_str(), ios::app);
-    base << padString(aCadastrar->nome, 50) << ";" << padString(aCadastrar->categoria, 20) << ";" << padString(aCadastrar->descricao, 500) << ";" << aCadastrar->preco << ";" << endl;
+    base << padString(aCadastrar->nome, 50) << ";" << padString(aCadastrar->categoria, 20) << ";" << padString(aCadastrar->descricao, 500) << ";";
+    base << setw(7) << setfill('0') << setprecision(3) << aCadastrar->preco << ";" << endl;
 }
 
 /*
@@ -119,7 +121,7 @@ void cadastrarProduto(Trie *iCategorias, Trie *iProdutos, string caminho, int *n
 *@return produto: retorna uma struct com os dados obtidos da linha fornecida
 *********************************************************/
 produto getProduto(string caminho, int linha){
-    ifstream base(caminho);
+    ifstream base(caminho.c_str());
     string linhaDescartavel;
     string linhaProduto;
     base>>linhaDescartavel;
