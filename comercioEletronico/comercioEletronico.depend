@@ -1,12 +1,15 @@
 # depslib dependency file v1.0
-1499889138 source:c:\users\almei\documents\github\estrutura-de-dados-ii\comercioeletronico\main.cpp
+1499923145 source:c:\users\almei\documents\github\estrutura-de-dados-ii\comercioeletronico\main.cpp
 	<iostream>
 	<string>
 	<fstream>
 	<vector>
 	<cstdlib>
+	<algorithm>
+	<sstream>
 	<stdlib.h>
 	<conio.h>
+	<iomanip>
 	"Trie.h"
 
 1499889083 source:c:\users\almei\documents\github\estrutura-de-dados-ii\comercioeletronico\trie.cpp
@@ -69,4 +72,176 @@
 1499657531 source:c:\users\brunom\desktop\ed2\new folder\estrutura-de-dados-ii\comercioeletronico\trieno.cpp
 	"TrieNo.h"
 	<stdlib.h>
+
+1499909426 source:c:\users\brunom\documents\estrutura-de-dados-ii-arquivo\estrutura-de-dados-ii-arquivo\comercioeletronico\trie.cpp
+	"Trie.h"
+
+1499909426 c:\users\brunom\documents\estrutura-de-dados-ii-arquivo\estrutura-de-dados-ii-arquivo\comercioeletronico\trie.h
+	"TrieNo.h"
+	<string>
+	<vector>
+	<iostream>
+	<stdlib.h>
+
+1499909426 c:\users\brunom\documents\estrutura-de-dados-ii-arquivo\estrutura-de-dados-ii-arquivo\comercioeletronico\trieno.h
+	<vector>
+
+1499909426 source:c:\users\brunom\documents\estrutura-de-dados-ii-arquivo\estrutura-de-dados-ii-arquivo\comercioeletronico\trieno.cpp
+	"TrieNo.h"
+	<stdlib.h>
+
+1499950455 source:c:\users\brunom\documents\estrutura-de-dados-ii-arquivo\estrutura-de-dados-ii-arquivo\comercioeletronico\main.cpp
+	<iostream>
+	<string>
+	<fstream>
+	<vector>
+	<cstdlib>
+	<algorithm>
+	<sstream>
+	<stdlib.h>
+	<conio.h>
+	<iomanip>
+	"sortExterno.hpp"
+	"Trie.h"
+
+1499949046 c:\users\brunom\documents\estrutura-de-dados-ii-arquivo\estrutura-de-dados-ii-arquivo\comercioeletronico\sortexterno.hpp
+	<iostream>
+	<fstream>
+	<sstream>
+	<string>
+	<vector>
+	<stdlib.h>
+	<math.h>
+
+1499950585 source:c:\users\brunom\documents\estrutura-de-dados-ii-arquivo\estrutura-de-dados-ii-arquivo\comercioeletronico\sortexterno.cpp
+	"sortExterno.hpp"
+
+1499909426 source:c:\users\brunom\dropbox\ed2\trabalhos ed2\estrutura-de-dados-ii-arquivo\comercioeletronico\trieno.cpp
+	"TrieNo.h"
+	<stdlib.h>
+
+1499909426 c:\users\brunom\dropbox\ed2\trabalhos ed2\estrutura-de-dados-ii-arquivo\comercioeletronico\trieno.h
+	<vector>
+
+1499954337 source:c:\users\brunom\dropbox\ed2\trabalhos ed2\estrutura-de-dados-ii-arquivo\comercioeletronico\main.cpp
+	<iostream>
+	<string>
+	<fstream>
+	<vector>
+	<cstdlib>
+	<algorithm>
+	<sstream>
+	<stdlib.h>
+	<conio.h>
+	<iomanip>
+	"sortExterno.hpp"
+	"Trie.h"
+
+1499949046 c:\users\brunom\dropbox\ed2\trabalhos ed2\estrutura-de-dados-ii-arquivo\comercioeletronico\sortexterno.hpp
+	<iostream>
+	<fstream>
+	<sstream>
+	<string>
+	<vector>
+	<stdlib.h>
+	<math.h>
+
+1499909426 c:\users\brunom\dropbox\ed2\trabalhos ed2\estrutura-de-dados-ii-arquivo\comercioeletronico\trie.h
+	"TrieNo.h"
+	<string>
+	<vector>
+	<iostream>
+	<stdlib.h>
+
+1499950585 source:c:\users\brunom\dropbox\ed2\trabalhos ed2\estrutura-de-dados-ii-arquivo\comercioeletronico\sortexterno.cpp
+	"sortExterno.hpp"
+
+1499955178 source:c:\users\brunom\dropbox\ed2\trabalhos ed2\estrutura-de-dados-ii-arquivo\comercioeletronico\trie.cpp
+	"Trie.h"
+
+1499961920 source:c:\users\pedro\dropbox\trabalhos ed2\estrutura-de-dados-ii-arquivo\comercioeletronico\main.cpp
+	<iostream>
+	<string>
+	<fstream>
+	<vector>
+	<cstdlib>
+	<algorithm>
+	<sstream>
+	<stdlib.h>
+	<conio.h>
+	<iomanip>
+	"sortExterno.hpp"
+	"Trie.h"
+
+1499949046 c:\users\pedro\dropbox\trabalhos ed2\estrutura-de-dados-ii-arquivo\comercioeletronico\sortexterno.hpp
+	<iostream>
+	<fstream>
+	<sstream>
+	<string>
+	<vector>
+	<stdlib.h>
+	<math.h>
+
+1499909426 c:\users\pedro\dropbox\trabalhos ed2\estrutura-de-dados-ii-arquivo\comercioeletronico\trie.h
+	"TrieNo.h"
+	<string>
+	<vector>
+	<iostream>
+	<stdlib.h>
+
+1499909426 c:\users\pedro\dropbox\trabalhos ed2\estrutura-de-dados-ii-arquivo\comercioeletronico\trieno.h
+	<vector>
+
+1499958658 source:c:\users\pedro\dropbox\trabalhos ed2\estrutura-de-dados-ii-arquivo\comercioeletronico\sortexterno.cpp
+	"sortExterno.hpp"
+
+1499960407 source:c:\users\pedro\dropbox\trabalhos ed2\estrutura-de-dados-ii-arquivo\comercioeletronico\trie.cpp
+	"Trie.h"
+
+1499909426 source:c:\users\pedro\dropbox\trabalhos ed2\estrutura-de-dados-ii-arquivo\comercioeletronico\trieno.cpp
+	"TrieNo.h"
+	<stdlib.h>
+
+1499960407 source:c:\users\almei\dropbox\trabalhos ed2\estrutura-de-dados-ii-arquivo\comercioeletronico\trie.cpp
+	"Trie.h"
+
+1499909426 c:\users\almei\dropbox\trabalhos ed2\estrutura-de-dados-ii-arquivo\comercioeletronico\trie.h
+	"TrieNo.h"
+	<string>
+	<vector>
+	<iostream>
+	<stdlib.h>
+
+1499909426 c:\users\almei\dropbox\trabalhos ed2\estrutura-de-dados-ii-arquivo\comercioeletronico\trieno.h
+	<vector>
+
+1499909426 source:c:\users\almei\dropbox\trabalhos ed2\estrutura-de-dados-ii-arquivo\comercioeletronico\trieno.cpp
+	"TrieNo.h"
+	<stdlib.h>
+
+1499962316 source:c:\users\almei\dropbox\trabalhos ed2\estrutura-de-dados-ii-arquivo\comercioeletronico\sortexterno.cpp
+	"sortExterno.hpp"
+
+1499949046 c:\users\almei\dropbox\trabalhos ed2\estrutura-de-dados-ii-arquivo\comercioeletronico\sortexterno.hpp
+	<iostream>
+	<fstream>
+	<sstream>
+	<string>
+	<vector>
+	<stdlib.h>
+	<math.h>
+
+1499965355 source:c:\users\almei\dropbox\trabalhos ed2\estrutura-de-dados-ii-arquivo\comercioeletronico\main.cpp
+	<iostream>
+	<string>
+	<fstream>
+	<vector>
+	<cstdlib>
+	<algorithm>
+	<sstream>
+	<stdlib.h>
+	<conio.h>
+	<iomanip>
+	"sortExterno.hpp"
+	"Trie.h"
 
