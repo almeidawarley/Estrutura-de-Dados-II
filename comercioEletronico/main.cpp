@@ -116,7 +116,7 @@ void cadastrarProduto(Trie *iCategorias, Trie *iProdutos, string caminho, int *n
          Trie *iProdutos:               TRIE para indexa��o dos produtos
 *@return -
 *********************************************************/
-void buscarPorNome(vector<produto*> *produtos, Trie *iProdutos){
+void buscarPorNome(string caminho, Trie *iProdutos){
     cout << "BUSCANDO POR NOME..." << endl;
     string nome;
     cout << "Digite o nome do produto que deseja procurar (digite '.' para finalizar o nome): "<<endl;
@@ -151,10 +151,10 @@ void buscarPorNome(vector<produto*> *produtos, Trie *iProdutos){
             vector<int> indices = iProdutos->recuperaIndices(nome);
             cout << "Produtos encontrados! Informacoes: " << endl;
             for(int k = 0; k < indices.size(); k++){
-                cout << " > Nome: " << (*produtos)[indices[k]]->nome << endl;
-                cout << " | Categoria: " << (*produtos)[indices[k]]->categoria << endl;
-                cout << " | Descricao: " << (*produtos)[indices[k]]->descricao << endl;
-                cout << " | Preco: " << (*produtos)[indices[k]]->preco << endl;
+//                cout << " > Nome: " << (*produtos)[indices[k]]->nome << endl;
+//                cout << " | Categoria: " << (*produtos)[indices[k]]->categoria << endl;
+//                cout << " | Descricao: " << (*produtos)[indices[k]]->descricao << endl;
+//                cout << " | Preco: " << (*produtos)[indices[k]]->preco << endl;
             }
         }else{
             cout << "Produto nao encontrado. Que tal: " << endl;
@@ -171,7 +171,7 @@ void buscarPorNome(vector<produto*> *produtos, Trie *iProdutos){
          Trie *iCategorias:             TRIE para indexa��o das categorias
 *@return -
 *********************************************************/
-void buscarPorCategoria(vector<produto*> *produtos, Trie *iCategorias){
+void buscarPorCategoria(string caminho, Trie *iCategorias){
     cout << "BUSCANDO POR CATEGORIA" << endl;
     string categoria;
     cout << "Digite o nome do produto que deseja procurar (digite '.' para finalizar o nome): "<<endl;
@@ -197,15 +197,16 @@ void buscarPorCategoria(vector<produto*> *produtos, Trie *iCategorias){
         c = getch();
         clear();
     }
+
     if (categoria.size() > 0) {
         if(iCategorias->buscarPalavra(categoria)){
             vector<int> indices = iCategorias->recuperaIndices(categoria);
             cout << "Produtos encontrados! Informacoes: " << endl;
             for(int k = 0; k < indices.size(); k++){
-                cout << " > Nome: " << (*produtos)[indices[k]]->nome << endl;
-                cout << " | Categoria: " << (*produtos)[indices[k]]->categoria << endl;
-                cout << " | Descricao: " << (*produtos)[indices[k]]->descricao << endl;
-                cout << " | Preco: " << (*produtos)[indices[k]]->preco << endl;
+//                cout << " > Nome: " << (*produtos)[indices[k]]->nome << endl;
+//                cout << " | Categoria: " << (*produtos)[indices[k]]->categoria << endl;
+//                cout << " | Descricao: " << (*produtos)[indices[k]]->descricao << endl;
+//                cout << " | Preco: " << (*produtos)[indices[k]]->preco << endl;
             }
         }else{
             cout << "Produto nao encontrado. Que tal: " << endl;
@@ -223,30 +224,9 @@ void buscarPorCategoria(vector<produto*> *produtos, Trie *iCategorias){
 *@return -
 *********************************************************/
 void finaliza(string caminho, int numeroRegistros){
-    ifstream entrada(caminho.c_str());
-    ofstream saida("temp.txt");
-    double meta = 0;
-    int i = 0;
-    int a; entrada >> a;
-    string linha;
-    saida << numeroRegistros;
-    cout << "Atualizando registros em " << caminho << ": 000%";
-    while(getline(entrada, linha, '\n')){
-        i++;
-        saida << linha << endl;
-        linha = "";
-        if((float)i/numeroRegistros > meta){
-            printf("\b\b\b\b%3.f%%", meta * 100);
-            meta += 0.1;
-        }
-    }
-    cout <<"\b\b\b\b100%"<< endl;
-    entrada.close();
-    saida.close();
-    string comando = "del " + caminho;
-    system(comando.c_str());
-    comando = "rename temp.txt " + caminho;
-    system(comando.c_str());
+    fstream base(caminho.c_str());
+    base << numeroRegistros << endl;
+
 }
 
 void heapfy(vector<produto*> *v, int ind, int tam, int opcao){
@@ -385,8 +365,8 @@ int main(){
         cout << "***************************************************" << endl;
         switch(opcao){
             case 1: cadastrarProduto(&iCategorias, &iProdutos, caminho, &numeroRegistros); break;
-            case 2: buscarPorNome(&produtos, &iProdutos); break;
-            case 3: buscarPorCategoria(&produtos, &iCategorias); break;
+            case 2: buscarPorNome(caminho, &iProdutos); break;
+            case 3: buscarPorCategoria(caminho, &iCategorias); break;
             case 4: relatorio(&produtos); break;
             case 5: finaliza(caminho, numeroRegistros); return 0;
             default: cout << "Opcao invalida, tente novamente" << endl;
