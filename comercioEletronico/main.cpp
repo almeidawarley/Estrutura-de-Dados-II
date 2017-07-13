@@ -36,62 +36,31 @@ void clear(){
          string caminho:                caminho do arquivo da base
 *@return -
 *********************************************************/
-void lerBase(vector<produto*> *produtos, Trie *iCategorias, Trie *iProdutos, string caminho){
+int lerBase(Trie *iCategorias, Trie *iProdutos, string caminho){
     ifstream base(caminho.c_str());
     string nome, categoria, descricao, preco, tamanho, enter;
     int numeroRegistros = 0;
     double meta = 0;
-    char quebra = (char) '\n'; // quebra de linha
+    char quebra = (char) '\n';
     getline(base, tamanho);
     numeroRegistros = atoi(tamanho.c_str());
-    produtos->reserve(numeroRegistros);
-    register int indice = 0;
+    register int indice = 1;
     cout << "Lendo registros de " << caminho << ": 000%";
     while(getline(base, nome, ';')){
         getline(base, categoria, ';');
         getline(base, descricao, ';');
         getline(base, preco, ';');
-        getline(base, enter, quebra); // a ideia é ler o enter no final da linha para que não seja transportado para a string
-        produto * leitura = new produto;
-        leitura->categoria = categoria;
-        leitura->nome = nome;
-        leitura->preco = strtof(preco.c_str(), 0);
-        leitura->descricao = descricao;
-        produtos->push_back(leitura);
+        getline(base, enter, quebra);
         iCategorias->inserirPalavra(categoria, indice);
         iProdutos->inserirPalavra(nome, indice);
-        indice++;
         if((float)indice/numeroRegistros > meta){
             printf("\b\b\b\b%3.f%%", meta * 100);
             meta += 0.1;
         }
+        indice++;
     }
     cout <<"\b\b\b\b100%"<< endl;
-    // imprimeBase(produtos);
-}
-
-/*
-*Funcao para desalocar os produtos e atualizar a base conforme caminho informado por par�metro
-*@param  vector<produto*> *produtos:    ponteiro para o vetor de produtos
-         string caminho:                caminho do arquivo da base
-*@return -
-*********************************************************/
-void finaliza(vector<produto*> produtos, string caminho){
-    ofstream saida(caminho.c_str());
-    double meta = 0;
-    saida << produtos.size() << endl;
-    cout << "Atualizando registros em " << caminho << ": 000%";
-    for(unsigned int i = 0; i < produtos.size(); i++){
-        saida << produtos[i]->nome << ";" << produtos[i]->categoria << ";" << produtos[i]->descricao << ";" << produtos[i]->preco << ";";
-        delete produtos[i];
-        produtos[i] = NULL;
-        if(i+1 != produtos.size()) saida << endl;
-        if((float)i/produtos.size() > meta){
-            printf("\b\b\b\b%3.f%%", meta * 100);
-            meta += 0.1;
-        }
-    }
-    cout <<"\b\b\b\b100%"<< endl;
+    return numeroRegistros;
 }
 
 /*
@@ -101,9 +70,10 @@ void finaliza(vector<produto*> produtos, string caminho){
          Trie *iProdutos:               TRIE para indexa��o dos produtos
 *@return -
 *********************************************************/
-void cadastrarProduto(vector<produto*> *produtos, Trie *iCategorias, Trie *iProdutos){
+void cadastrarProduto(Trie *iCategorias, Trie *iProdutos, string caminho, int *numeroRegistros){
     string preco;
     produto * aCadastrar = new produto;
+
     cout << "CADASTRANDO PRODUTO..." << endl;
     char quebra = (char) 10;
     cin.ignore();
@@ -116,9 +86,12 @@ void cadastrarProduto(vector<produto*> *produtos, Trie *iCategorias, Trie *iProd
     cout << "Digite o preco do produto a ser cadastrado: ";
     getline(cin, preco, quebra);
     aCadastrar->preco = strtof(preco.c_str(), 0);
-    iCategorias->inserirPalavra(aCadastrar->categoria, produtos->size());
-    iProdutos->inserirPalavra(aCadastrar->nome, produtos->size());
-    produtos->push_back(aCadastrar);
+
+    (*numeroRegistros) += 1;
+    iCategorias->inserirPalavra(aCadastrar->categoria,(*numeroRegistros));
+    iProdutos->inserirPalavra(aCadastrar->nome,(*numeroRegistros));
+    ofstream base(caminho.c_str(), ios::app);
+    base << aCadastrar->nome << ";"<<aCadastrar->categoria<<";"<<aCadastrar->descricao<<";"<<aCadastrar->preco<<";"<<endl;
 }
 
 /*
@@ -225,6 +198,39 @@ void buscarPorCategoria(vector<produto*> *produtos, Trie *iCategorias){
                 cout << i+1 << "] " << retorno[i] << endl;
         }
     }
+}
+
+/*
+*Funcao para desalocar os produtos e atualizar a base conforme caminho informado por par�metro
+*@param  vector<produto*> *produtos:    ponteiro para o vetor de produtos
+         string caminho:                caminho do arquivo da base
+*@return -
+*********************************************************/
+void finaliza(string caminho, int numeroRegistros){
+    ifstream entrada(caminho.c_str());
+    ofstream saida("temp.txt");
+    double meta = 0;
+    int i = 0;
+    int a; entrada >> a;
+    string linha;
+    saida << numeroRegistros;
+    cout << "Atualizando registros em " << caminho << ": 000%";
+    while(getline(entrada, linha, '\n')){
+        i++;
+        saida << linha << endl;
+        linha = "";
+        if((float)i/numeroRegistros > meta){
+            printf("\b\b\b\b%3.f%%", meta * 100);
+            meta += 0.1;
+        }
+    }
+    cout <<"\b\b\b\b100%"<< endl;
+    entrada.close();
+    saida.close();
+    string comando = "del " + caminho;
+    system(comando.c_str());
+    comando = "rename temp.txt " + caminho;
+    system(comando.c_str());
 }
 
 void heapfy(vector<produto*> *v, int ind, int tam, int opcao){
@@ -348,7 +354,7 @@ int main(){
     cout << "Informe o arquivo de origem dos registros: "; cin >> caminho;
     vector<produto*> produtos;
     Trie iCategorias, iProdutos;
-    lerBase(&produtos, &iCategorias, &iProdutos, caminho);
+    int numeroRegistros = lerBase(&iCategorias, &iProdutos, caminho);
     while(opcao!=5){
         cout << "***************************************************" << endl;
         cout << "Bem-vindo ao Toraku, sistema de comercio eletronico" << endl;
@@ -362,11 +368,11 @@ int main(){
         cin >> opcao;
         cout << "***************************************************" << endl;
         switch(opcao){
-            case 1: cadastrarProduto(&produtos, &iCategorias, &iProdutos); break;
+            case 1: cadastrarProduto(&iCategorias, &iProdutos, caminho, &numeroRegistros); break;
             case 2: buscarPorNome(&produtos, &iProdutos); break;
             case 3: buscarPorCategoria(&produtos, &iCategorias); break;
             case 4: relatorio(&produtos); break;
-            case 5: finaliza(produtos, caminho); return 0;
+            case 5: finaliza(caminho, numeroRegistros); return 0;
             default: cout << "Opcao invalida, tente novamente" << endl;
         }
         cout << "***************************************************" << endl;
@@ -376,11 +382,11 @@ int main(){
         cin >> opcao;
         cout << "***************************************************" << endl;
         switch(opcao){
-            case 2: finaliza(produtos, caminho); return 0;
+            case 2: finaliza(caminho, numeroRegistros); return 0;
             default: break;
         }
         clear();
     }
-    finaliza(produtos, caminho);
+    finaliza(caminho, numeroRegistros);
     return 0;
 }
