@@ -21,8 +21,11 @@ void gen_random(string *nova, const int len) {
 }
 
 int main(int argc, char *argv[]){
-    if(argc < 2)
+    if(argc <= 2) {
+        cout << "Numero de parametros insuficiente" << endl;
+        cout << "Uso: programa <numero_instancias> <arquivo_saida>" << endl;
         return 0;
+    }
     int tamanho = atoi(argv[1]);
     ofstream saida(argv[2]);
     string nome, categoria, descricao;
