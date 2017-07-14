@@ -13,9 +13,9 @@
 
 >[Relatório no Latex](https://pt.sharelatex.com/project/59664f1cc7d3657046d9618f)
 
-- [ ] Preencher tabela dos testes de tempo de ordenação (Bruno?)
+- [x] Preencher tabela dos testes de tempo de ordenação (Bruno?)
 - [x] Preencher tabela dos testes de tempo de busca (Warley?)
 - [x] Preencher tabela dos testes de uso de memória (André?)
 - [x] Explicação sobre estrutura de dados (Pedro?)
 
-Obs: Resta também justificar as soluções que encontramos e falar o que cada um fez. Vamos ter que decidir isso em grupo
+Obs: Resta também justificar as soluções que encontramos e falar o que cada um fez.
